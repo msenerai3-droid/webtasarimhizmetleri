@@ -1,1 +1,258 @@
+# YouTube Canlı Yorum Takip Sistemi - robots.txt
+# Özelleştirilmiş Konfigürasyon
+# Son Güncelleme: Şubat 2024
+# Domain: https://webtasarimhizmetleri.vercel.app/
+# Alt-sayfa grubu: /youtube-canli-yorum-takip-*.html
+# ================================================================
 
+# 1. TÜM ARAMA MOTORLARI İÇİN GENEL KURALLAR
+User-agent: *
+
+# YouTube sistemi sayfalarının hepsine izin ver
+Allow: /youtube-canli-yorum-takip*.html
+Allow: /youtube-canli-yorum-takip/
+
+# Statik kaynaklar
+Allow: *.css
+Allow: *.js
+Allow: *.json
+Allow: /assets/
+Allow: /images/
+Allow: /static/
+
+# Dinamik parametrelerle sayfalar - İZİN VER
+Allow: /youtube-canli-yorum-takip-anasayfa.html
+Allow: /youtube-canli-yorum-takip.html
+
+# Yasaklanacak kaynaklar
+Disallow: /admin/*
+Disallow: /private/*
+Disallow: /temp/*
+Disallow: /*.js?*
+Disallow: /*.css?*
+
+# Duplicate content'i önle
+Disallow: /*?utm_source=
+Disallow: /*?utm_medium=
+Disallow: /*?utm_campaign=
+Disallow: /*?fbclid=
+Disallow: /*?gclid=
+Disallow: /*?msclkid=
+
+# Döngü önleme
+Disallow: /*?*sort=
+Disallow: /*?*page=*&*page=
+Disallow: /*duplicate
+Disallow: /cgi-bin/
+
+# PDF ve diğer ağır dosyalar (opsiyonel - uncomment et)
+# Disallow: /*.pdf
+# Disallow: /*.doc
+# Disallow: /*.docx
+
+# Spam dosyalar
+Disallow: /spam/
+Disallow: /.well-known/acme-challenge/
+
+# ================================================================
+# 2. GOOGLE BOT AYARLARI (Hızlı İndeksleme)
+# ================================================================
+User-agent: Googlebot
+Allow: /youtube-canli-yorum-takip*.html
+Allow: /
+Crawl-delay: 0
+Request-rate: 30/1s
+
+# Google Image Bot - Resimleri tarayabilir
+User-agent: Googlebot-Image
+Allow: /
+
+# Google Mobile Bot - Mobil indeksleme
+User-agent: Googlebot-Mobile
+Allow: /
+
+# ================================================================
+# 3. BING BOT AYARLARI
+# ================================================================
+User-agent: Bingbot
+Allow: /youtube-canli-yorum-takip*.html
+Allow: /
+Crawl-delay: 1
+Request-rate: 30/1s
+
+User-agent: Bingbot-Mobile
+Allow: /
+
+# ================================================================
+# 4. YANDEX BOT AYARLARI (Türkiye, Rusya)
+# ================================================================
+User-agent: Yandex
+Allow: /youtube-canli-yorum-takip*.html
+Allow: /
+Crawl-delay: 0.1
+
+# ================================================================
+# 5. BAIDU BOT AYARLARI (Çin pazarı)
+# ================================================================
+User-agent: Baiduspider
+Allow: /youtube-canli-yorum-takip*.html
+Allow: /
+Crawl-delay: 1
+
+# ================================================================
+# 6. SOSYAL MEDYA BOTLARI (Paylaşım & Link Preview)
+# ================================================================
+
+# Facebook - Og tag'ları ve link preview
+User-agent: facebookexternalhit
+Allow: /youtube-canli-yorum-takip*.html
+Allow: /
+
+# Twitter Card Bot
+User-agent: Twitterbot
+Allow: /youtube-canli-yorum-takip*.html
+Allow: /
+
+# Twitter Media Bot
+User-agent: TwitterBot
+Allow: /youtube-canli-yorum-takip*.html
+Allow: /
+
+# LinkedIn Bot
+User-agent: LinkedInBot
+Allow: /youtube-canli-yorum-takip*.html
+Allow: /
+
+# LinkedIn Bot (Mobile)
+User-agent: LinkedInBot-Mobile
+Allow: /youtube-canli-yorum-takip*.html
+Allow: /
+
+# WhatsApp Bot
+User-agent: WhatsApp
+Allow: /youtube-canli-yorum-takip*.html
+Allow: /
+
+# Pinterest Bot
+User-agent: PinterestBot
+Allow: /youtube-canli-yorum-takip*.html
+Allow: /
+
+# Reddit Bot
+User-agent: RedditBot
+Allow: /youtube-canli-yorum-takip*.html
+Allow: /
+
+# Telegram Bot
+User-agent: TelegramBot
+Allow: /youtube-canli-yorum-takip*.html
+Allow: /
+
+# Slack Bot
+User-agent: Slackbot
+Allow: /youtube-canli-yorum-takip*.html
+Allow: /
+
+# Discord Bot
+User-agent: Discordbot
+Allow: /youtube-canli-yorum-takip*.html
+Allow: /
+
+# ================================================================
+# 7. ÖZEL GOOGLE BOT'LARI
+# ================================================================
+
+# Google Ads Bot
+User-agent: Googleads-Google
+Allow: /youtube-canli-yorum-takip*.html
+
+# Google Feedfetcher
+User-agent: Feedfetcher-Google
+Allow: /youtube-canli-yorum-takip*.html
+
+# ================================================================
+# 8. İSTENMEYEN BOT VE SCRAPERLAR (YASAKLA)
+# ================================================================
+
+# Aggressive SEO crawlers
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: SemrushBot-SA
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: MegaIndex.ru
+Disallow: /
+
+# Generic crawler
+User-agent: MJ12bot
+Disallow: /
+
+# Aggressive indexers
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: Nmap Scripting Engine
+Disallow: /
+
+# ================================================================
+# 9. GENEL CRAWL AYARLARI (Tüm botlar için)
+# ================================================================
+User-agent: *
+Crawl-delay: 0
+Request-rate: 30/1s
+
+# ================================================================
+# 10. SITEMAP KONUMLAR (KRITIK)
+# ================================================================
+
+# Ana YouTube sistemi sitemap
+Sitemap: https://webtasarimhizmetleri.vercel.app/youtube-sitemap.xml
+
+# Yedek sitemap konumu
+Sitemap: https://webtasarimhizmetleri.vercel.app/sitemap-youtube.xml
+
+# ================================================================
+# 11. İLETİŞİM VE BİLGİLER
+# ================================================================
+
+# Crawl-delay Açıklaması:
+# - 0 = Hemen tarayabilir (Google için)
+# - 0.1 = 100ms bekleme arası (Yandex için)
+# - 1 = 1 saniye bekleme arası (Bing, Baidu için)
+
+# Request-rate Açıklaması:
+# - 30/1s = Saniye başına 30 istek yapabilir
+# - Sunucuyu aşırı yüklemekten korur
+
+# Sosyal Medya Botları:
+# - Facebook, Twitter, LinkedIn, etc. allowed
+# - Link preview'lar için kritik önem
+# - Paylaşılabilirlik açısından gerekli
+
+# YouTube Sistemi Özelleştirmeleri:
+# - /youtube-canli-yorum-takip*.html pattern'i tüm sayfaları kapsar
+# - Admin sayfası: youtube-canli-yorum-takip-admin.html
+# - Uygulama sayfası: youtube-canli-yorum-takip.html
+# - Diğer tüm alt-sayfalar: youtube-canli-yorum-takip-*.html
+
+# ================================================================
+# 12. PERIYODIK KONTROL LİSTESİ (Aylık)
+# ================================================================
+
+# Kontrol noktaları:
+# □ Google Search Console'da crawl istatistikleri
+# □ Bing Webmaster Tools'da indexing durumu
+# □ Yandex Metrica'da trafik kaynakları
+# □ robots.txt tester'da hata kontrolü
+# □ Site hızı (PageSpeed Insights)
+# □ Organik trafik artışı (Analytics)
+# □ Ranking konumları (Top keywords)
+
+# ================================================================
