@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="YouTube Canlı Yorum Takip Sistemi blog. Sistem hakkında ipuçları, haberler ve rehberler.">
+    <title>Blog | YouTube Canlı Yorum Takip Sistemi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a08;
+            --bg2: #111110;
+            --cream: #ffffff;
+            --gold: #c9a84c;
+            --text-muted: #9a9a94;
+            --border: #2a2a26;
+        }
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--cream);
+            -webkit-font-smoothing: antialiased;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10,10,8,0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 40px;
+        }
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        header .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--gold);
+            text-decoration: none;
+        }
+        header .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+        header .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+        header .nav-links a:hover {
+            color: var(--gold);
+        }
+        header .cta-btn {
+            background: var(--cream);
+            color: var(--bg);
+            padding: 8px 20px;
+            border: none;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background 0.3s;
+        }
+        header .cta-btn:hover {
+            background: var(--gold);
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 140px 40px 80px;
+        }
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.8rem;
+            font-weight: 300;
+            margin-bottom: 40px;
+            letter-spacing: -0.02em;
+        }
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+        }
+        .blog-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .blog-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-4px);
+        }
+        .blog-card-content {
+            padding: 28px;
+        }
+        .blog-tag {
+            display: inline-block;
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-size: 0.6rem;
+            padding: 4px 10px;
+            margin-bottom: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .blog-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 400;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .blog-card p {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+        .blog-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            padding-top: 12px;
+        }
+        footer {
+            padding: 40px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            margin-top: 80px;
+        }
+        footer p {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
+            margin-bottom: 8px;
+        }
+        @media (max-width: 768px) {
+            header { padding: 12px 20px; }
+            .container { padding: 100px 20px 60px; }
+            h1 { font-size: 2rem; }
+            .blog-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="youtube-canli-yorum-takip-anasayfa.html" class="logo">▶ LiveTrack</a>
+            <ul class="nav-links">
+                <li><a href="youtube-canli-yorum-takip-anasayfa.html#features">Özellikler</a></li>
+                <li><a href="youtube-canli-yorum-takip-hakkinda.html">Hakkında</a></li>
+                <li><a href="youtube-canli-yorum-takip-sss.html">SSS</a></li>
+            </ul>
+            <a href="youtube-canli-yorum-takip.html" class="cta-btn">Uygulamaya Git</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Blog & İpuçları</h1>
+
+        <div class="blog-grid">
+            <div class="blog-card">
+                <div class="blog-card-content">
+                    <span class="blog-tag">Rehber</span>
+                    <h3>Adil Çekiliş Düzenlemenin 5 İpucu</h3>
+                    <p>Çekiliş düzenlerken adil ve şeffaf olmak için bilmeniz gereken ipuçları. Şeffaflık, katılımcı sayısı ve seçim yöntemi hakkında detaylar. Sistem sayesinde tüm işlemler otomatik ve manipüle edilemez.</p>
+                    <div class="blog-meta">
+                        <span>📅 15 Mart 2024</span>
+                        <span>⏱ 7 dk okuma</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-content">
+                    <span class="blog-tag">Haber</span>
+                    <h3>Sınırsız Premium Paketi Açıldı</h3>
+                    <p>Artık sınırsız erişim için yıllık premium paketi sunuyoruz. 9999 TL ile yıllık kullanım yapabilirsiniz. Aylık 999 TL'ye kıyasla çok daha ekonomik. İşletmeler için ideal çözüm.</p>
+                    <div class="blog-meta">
+                        <span>📅 10 Mart 2024</span>
+                        <span>⏱ 3 dk okuma</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-content">
+                    <span class="blog-tag">Teknik</span>
+                    <h3>En Yüksek Sayı Modu Nasıl Çalışır?</h3>
+                    <p>Sistem, yorumlardaki sayıları nasıl tespit eder? Algoritma ne kadar hızlı çalışır? Kullanıcı adları neden sayılmaz? Teknik detayları ve performans optimizasyonları açıklıyoruz.</p>
+                    <div class="blog-meta">
+                        <span>📅 5 Mart 2024</span>
+                        <span>⏱ 8 dk okuma</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-content">
+                    <span class="blog-tag">İpucu</span>
+                    <h3>Mobil Telefonda Sorunsuz Kullanım</h3>
+                    <p>Canlı yayın sırasında telefonda sistemi açık tutmak için batarya tasarrufu ipuçları. Arka planda çalıştırma, internet bağlantısı iyileştirme ve performans tüyoları.</p>
+                    <div class="blog-meta">
+                        <span>📅 1 Mart 2024</span>
+                        <span>⏱ 5 dk okuma</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-content">
+                    <span class="blog-tag">Başarı Hikayesi</span>
+                    <h3>E-ticaret İşletmesi 100+ Kişi Çekiliş Yaptı</h3>
+                    <p>Bir e-ticaret işletmesi, sistemimizi kullanarak 100'ü aşkın katılımcı arasından kazananları seçti. Nasıl sonuç elde ettiler? Kişi sayısı arttıkça sistem ne kadar hızlı çalışıyor?</p>
+                    <div class="blog-meta">
+                        <span>📅 25 Şubat 2024</span>
+                        <span>⏱ 6 dk okuma</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-content">
+                    <span class="blog-tag">Güvenlik</span>
+                    <h3>Verileriniz Nereye Kaydediliyor?</h3>
+                    <p>Gizlilik hakkında endişe mi var? Verilerinizin nereye kaydedildiğini, nasıl korunduğunu ve ne zaman silindiğini anlatan rehber. Firebase güvenliği ve GDPR uyumluluğu.</p>
+                    <div class="blog-meta">
+                        <span>📅 20 Şubat 2024</span>
+                        <span>⏱ 6 dk okuma</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-content">
+                    <span class="blog-tag">Eğitim</span>
+                    <h3>Rastgele Çekiliş vs İlk Yazan: Hangisi Daha Adil?</h3>
+                    <p>Farklı çekiliş yöntemlerinin avantajları ve dezavantajları. İlk Yazan yöntemi ne zaman kullanılmalı? Rastgele çekiliş ne zaman daha iyi? Karşılaştırmalı analiz.</p>
+                    <div class="blog-meta">
+                        <span>📅 15 Şubat 2024</span>
+                        <span>⏱ 7 dk okuma</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-content">
+                    <span class="blog-tag">Rehber</span>
+                    <h3>Canlı Yayında Çekiliş Yönetmenin Profesyonel Yolu</h3>
+                    <p>YouTube, TikTok Live ve Instagram Live'da çekiliş düzenlemek için en iyi uygulamalar. Yayın sırasında sistem nasıl kurulur? Teknik setupta nelere dikkat edilmeli?</p>
+                    <div class="blog-meta">
+                        <span>📅 10 Şubat 2024</span>
+                        <span>⏱ 8 dk okuma</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-content">
+                    <span class="blog-tag">Haber</span>
+                    <h3>30 Dakika Ücretsiz Deneme Başladı</h3>
+                    <p>Yeni kullanıcılar artık 30 dakika boyunca tüm özellikleri test edebiliyor. Eski 15 dakikanın iki katı. Bu süre içinde birkaç çekiliş deneyebilirsiniz.</p>
+                    <div class="blog-meta">
+                        <span>📅 5 Şubat 2024</span>
+                        <span>⏱ 2 dk okuma</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-content">
+                    <span class="blog-tag">İpucu</span>
+                    <h3>Kayıt Arşivini Etkili Kullanma</h3>
+                    <p>Çekiliş sonuçlarını nasıl organize edersiniz? İyi isimler vermek neden önemli? Geçmiş çekiliş sonuçlarından nasıl rapor çıkarabilirsiniz?</p>
+                    <div class="blog-meta">
+                        <span>📅 1 Şubat 2024</span>
+                        <span>⏱ 4 dk okuma</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-content">
+                    <span class="blog-tag">Başarı Hikayesi</span>
+                    <h3>Yayıncı 500 Çekiliş Düzenledi</h3>
+                    <p>Ünlü bir YouTube yayıncısı sistem sayesinde 500'e yakın çekiliş düzenledi. Her çekiliş kaydedildi ve izleyiciler sonuçların adil olduğundan emin oldu.</p>
+                    <div class="blog-meta">
+                        <span>📅 28 Ocak 2024</span>
+                        <span>⏱ 5 dk okuma</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-content">
+                    <span class="blog-tag">Eğitim</span>
+                    <h3>API Entegrasyonu: Sistem Nasıl Çalışıyor?</h3>
+                    <p>YouTube API'nin arkasında neler var? Sistem hangi veri tabanını kullanıyor? Teknik merakılılar için derinlemesine rehber.</p>
+                    <div class="blog-meta">
+                        <span>📅 22 Ocak 2024</span>
+                        <span>⏱ 10 dk okuma</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-content">
+                    <span class="blog-tag">Rehber</span>
+                    <h3>Müşteri Hizmetleri: İletişim Kurmak Kolay</h3>
+                    <p>Sorun mu yaşadınız? Destek ekibine nasıl ulaşabilirsiniz? WhatsApp, telefon, e-posta seçenekleri ve ortalama yanıt süreleri.</p>
+                    <div class="blog-meta">
+                        <span>📅 18 Ocak 2024</span>
+                        <span>⏱ 3 dk okuma</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 YouTube Canlı Yorum Takip Sistemi</p>
+        <p><a href="youtube-canli-yorum-takip-anasayfa.html">Ana Sayfa</a> | <a href="youtube-canli-yorum-takip-iletisim.html">İletişim</a></p>
+    </footer>
+</body>
+</html>

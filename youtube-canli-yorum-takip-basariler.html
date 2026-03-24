@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="YouTube Canlı Yorum Takip Sistemi kullanıcıları başarı hikayeleri ve referansları.">
+    <title>Başarı Hikayeleri | YouTube Canlı Yorum Takip Sistemi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a08;
+            --bg2: #111110;
+            --cream: #ffffff;
+            --gold: #c9a84c;
+            --text-muted: #9a9a94;
+            --border: #2a2a26;
+        }
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--cream);
+            -webkit-font-smoothing: antialiased;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10,10,8,0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 40px;
+        }
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        header .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--gold);
+            text-decoration: none;
+        }
+        header .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+        header .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+        header .nav-links a:hover {
+            color: var(--gold);
+        }
+        header .cta-btn {
+            background: var(--cream);
+            color: var(--bg);
+            padding: 8px 20px;
+            border: none;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background 0.3s;
+        }
+        header .cta-btn:hover {
+            background: var(--gold);
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 140px 40px 80px;
+        }
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.8rem;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 60px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+        .stat-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            padding: 28px;
+            text-align: center;
+        }
+        .stat-card .number {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.2rem;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+        .stat-card .label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+        }
+        .testimonial-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            padding: 32px;
+            transition: all 0.3s;
+        }
+        .testimonial-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-4px);
+        }
+        .testimonial-rating {
+            color: var(--gold);
+            font-size: 1rem;
+            margin-bottom: 12px;
+        }
+        .testimonial-text {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        .testimonial-author {
+            border-top: 1px solid var(--border);
+            padding-top: 16px;
+        }
+        .author-name {
+            font-weight: 600;
+            color: var(--cream);
+            margin-bottom: 4px;
+        }
+        .author-title {
+            font-size: 0.75rem;
+            color: var(--gold);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        footer {
+            padding: 40px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            margin-top: 80px;
+        }
+        footer p {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
+            margin-bottom: 8px;
+        }
+        @media (max-width: 768px) {
+            header { padding: 12px 20px; }
+            .container { padding: 100px 20px 60px; }
+            h1 { font-size: 2rem; }
+            .testimonials { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="youtube-canli-yorum-takip-anasayfa.html" class="logo">▶ LiveTrack</a>
+            <ul class="nav-links">
+                <li><a href="youtube-canli-yorum-takip-anasayfa.html#features">Özellikler</a></li>
+                <li><a href="youtube-canli-yorum-takip-hakkinda.html">Hakkında</a></li>
+                <li><a href="youtube-canli-yorum-takip-nasil-calisir.html">Nasıl Çalışır</a></li>
+            </ul>
+            <a href="youtube-canli-yorum-takip.html" class="cta-btn">Uygulamaya Git</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Başarı Hikayeleri</h1>
+        <p class="subtitle">Gerçek kullanıcılarından gerçek sonuçlar</p>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="number">500+</div>
+                <div class="label">Çekiliş Yapıldı</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">10K+</div>
+                <div class="label">Katılımcı</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">98%</div>
+                <div class="label">Memnuniyet</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">24/7</div>
+                <div class="label">Hizmet</div>
+            </div>
+        </div>
+
+        <div class="testimonials">
+            <div class="testimonial-card">
+                <div class="testimonial-rating">★★★★★</div>
+                <div class="testimonial-text">
+                    "Canlı yayınlarda çekiliş yönetimi çok kolay hale geldi. Sistem adil ve şeffaf, 
+                    izleyicilerim çok memnun. Kesinlikle tavsiye ederim!"
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-name">Ayşe Yılmaz</div>
+                    <div class="author-title">YouTube Yayıncısı</div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-rating">★★★★★</div>
+                <div class="testimonial-text">
+                    "E-ticaret işletmemiz için mükemmel bir araç. Canlı alışveriş sırasında 100+ kişi 
+                    arasından kazananları seçmek sadece birkaç saniye sürüyor. İnanılmaz hızlı ve güvenilir."
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-name">Mehmet Demir</div>
+                    <div class="author-title">E-ticaret Girişimcisi</div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-rating">★★★★★</div>
+                <div class="testimonial-text">
+                    "4 farklı çekiliş yönteminin olması harika. Her kampanya için uygun seçenek var. 
+                    Ücretsiz deneme ile direkt karar verdim, şimdi premium kullanıcısıyım."
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-name">Fatma Kara</div>
+                    <div class="author-title">Sosyal Medya Yöneticisi</div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-rating">★★★★★</div>
+                <div class="testimonial-text">
+                    "Verilerim sadece tarayıcımda saklandığı için rahattım. Gizlilik endişem tamamen gitti. 
+                    Profesyonel ve güvenilir bir araç."
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-name">Cem Özkan</div>
+                    <div class="author-title">Pazarlama Müdürü</div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-rating">★★★★★</div>
+                <div class="testimonial-text">
+                    "Mobil telefonda harika çalışıyor. Canlı yayın sırasında her yere taşıyabiliyorum. 
+                    Masaüstüyle aynı performansı gösteriyor."
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-name">Zeynep Acar</div>
+                    <div class="author-title">İçerik Üreticisi</div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-rating">★★★★★</div>
+                <div class="testimonial-text">
+                    "Teknik desteği hızlı ve yardımcı. Bir sorun yaşadığımda 30 dakika içinde çözüldü. 
+                    Ekip çok ilgili ve profesyonel."
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-name">İbrahim Çetin</div>
+                    <div class="author-title">TikTok Live Yayıncısı</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 YouTube Canlı Yorum Takip Sistemi</p>
+        <p><a href="youtube-canli-yorum-takip-anasayfa.html">Ana Sayfa</a> | <a href="youtube-canli-yorum-takip-iletisim.html">İletişim</a></p>
+    </footer>
+</body>
+</html>

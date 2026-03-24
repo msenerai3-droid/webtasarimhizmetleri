@@ -1,0 +1,14 @@
+# Robots.txt - Web, Kodlama & Tasarım Studio
+# Arama motorları için site tarama kuralları
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+Disallow: /cdn-cgi/
+
+# Sitemap
+Sitemap: https://www.yourdomain.com/sitemap.xml
+
+# Crawl delay (opsiyonel)
+Crawl-delay: 1

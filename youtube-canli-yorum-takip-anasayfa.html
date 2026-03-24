@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="YouTube canlı yayınlarda otomatik yorum takibi, çekiliş yönetimi ve kazanan seçimi. Mezat satışı ve canlı alışveriş işletmecileri için profesyonel çözüm.">
+    <meta name="keywords" content="YouTube canlı yorum, mezat satışı, canlı alışveriş, çekiliş sistemi, yorum takibi">
+    <meta property="og:title" content="YouTube Canlı Yorum Takip Sistemi - Profesyonel Çekiliş & Satış Yönetimi">
+    <meta property="og:description" content="Canlı yayınlarda otomatik yorum takibi ve akıllı çekiliş yönetimi. 15 dakika ücretsiz deneme.">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630">
+    <title>YouTube Canlı Yorum Takip Sistemi | Profesyonel Çekiliş Yönetimi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a08;
+            --bg2: #111110;
+            --cream: #ffffff;
+            --gold: #c9a84c;
+            --gold-light: #d4b86a;
+            --text-muted: #9a9a94;
+            --border: #2a2a26;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--cream);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+            opacity: 0.025;
+            pointer-events: none;
+        }
+        
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10,10,8,0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 40px;
+        }
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        header .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: -0.02em;
+            text-decoration: none;
+        }
+        header .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+        header .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+        header .nav-links a:hover {
+            color: var(--gold);
+        }
+        header .cta-btn {
+            background: var(--cream);
+            color: var(--bg);
+            padding: 8px 20px;
+            border: none;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            cursor: pointer;
+            transition: background 0.3s;
+            text-transform: uppercase;
+        }
+        header .cta-btn:hover {
+            background: var(--gold);
+        }
+
+        /* Hero */
+        .hero {
+            margin-top: 70px;
+            padding: 80px 40px 100px;
+            text-align: center;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 300;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+        .hero h1 em {
+            font-style: italic;
+            color: var(--gold);
+        }
+        .hero p {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+        .hero .buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .hero .btn-primary {
+            background: var(--cream);
+            color: var(--bg);
+            padding: 14px 32px;
+            border: none;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.14em;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+        .hero .btn-primary:hover {
+            background: var(--gold);
+            transform: translateY(-2px);
+        }
+        .hero .btn-secondary {
+            background: transparent;
+            color: var(--cream);
+            padding: 14px 32px;
+            border: 1px solid var(--border);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.14em;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+        .hero .btn-secondary:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        /* Features Grid */
+        .features {
+            padding: 100px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .features h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 60px;
+            letter-spacing: -0.01em;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+        }
+        .feature-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            padding: 32px;
+            transition: all 0.3s;
+        }
+        .feature-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-4px);
+        }
+        .feature-card .icon {
+            font-size: 2rem;
+            margin-bottom: 16px;
+        }
+        .feature-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin-bottom: 12px;
+            color: var(--cream);
+        }
+        .feature-card p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* Stats */
+        .stats {
+            padding: 60px 40px;
+            background: var(--bg2);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        .stats-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 32px;
+            text-align: center;
+        }
+        .stat-item h4 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+        .stat-item p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 80px 40px;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .cta-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 24px;
+            letter-spacing: -0.01em;
+        }
+        .cta-section p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            line-height: 1.7;
+        }
+        .cta-section .btn-primary {
+            background: var(--cream);
+            color: var(--bg);
+            padding: 14px 40px;
+            border: none;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.14em;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .cta-section .btn-primary:hover {
+            background: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+        footer p {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+        }
+        footer a {
+            color: var(--gold);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        footer a:hover {
+            color: var(--gold-light);
+        }
+
+        /* Language Switcher */
+        .lang-switcher {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 50;
+            display: flex;
+            gap: 4px;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            padding: 4px;
+        }
+        .lang-switcher button {
+            padding: 6px 12px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.65rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'DM Mono', monospace;
+        }
+        .lang-switcher button.active {
+            background: var(--bg);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 12px 20px; }
+            header .nav-links { gap: 16px; font-size: 0.65rem; }
+            .hero { padding: 60px 20px 80px; margin-top: 60px; }
+            .hero h1 { font-size: 2rem; }
+            .features { padding: 60px 20px; }
+            .features-grid { gap: 16px; }
+            .hero .buttons { flex-direction: column; }
+            .hero .btn-primary, .hero .btn-secondary { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#" class="logo">▶ LiveTrack</a>
+            <ul class="nav-links">
+                <li><a href="#features">Özellikler</a></li>
+                <li><a href="youtube-canli-yorum-takip-hakkinda.html">Hakkında</a></li>
+                <li><a href="youtube-canli-yorum-takip-nasil-calisir.html">Nasıl Çalışır</a></li>
+                <li><a href="youtube-canli-yorum-takip-fiyatlandirma.html">Fiyatlandırma</a></li>
+            </ul>
+            <a href="youtube-canli-yorum-takip.html" class="cta-btn">Uygulamaya Git</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>YouTube Canlı Yorum <em>Takip Sistemi</em></h1>
+        <p>Canlı yayınlarınızda otomatik yorum izleme, akıllı çekiliş yönetimi ve kazanan seçimi. Mezat satışı ve canlı alışveriş işletmecileri için profesyonel çözüm.</p>
+        <div class="buttons">
+            <a href="youtube-canli-yorum-takip.html" class="btn-primary">Başla (Ücretsiz)</a>
+            <a href="youtube-canli-yorum-takip-ozellikleri.html" class="btn-secondary">Özellikleri Gör</a>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <h4>30 dk</h4>
+                <p>Ücretsiz Deneme</p>
+            </div>
+            <div class="stat-item">
+                <h4>4 Mod</h4>
+                <p>Takip Sistemi</p>
+            </div>
+            <div class="stat-item">
+                <h4>∞</h4>
+                <p>Kayıt Arşivi</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <h2>Güçlü Özellikler</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon">🎯</div>
+                <h3>İlk Yazan Takibi</h3>
+                <p>Belirttiğiniz kelimeyi ilk yazan kişiyi otomatik olarak tespit edin ve kazanan seçin.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📊</div>
+                <h3>Sıralı Yazar Listesi</h3>
+                <p>Kelimeyi yazan kişileri sırasıyla listeleyerek adil çekiliş ortamı oluşturun.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🏆</div>
+                <h3>En Yüksek Sayı</h3>
+                <p>Yorumlarda yazan en yüksek sayıyı bulup kazananı otomatik seçin.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🎲</div>
+                <h3>Rastgele Çekiliş</h3>
+                <p>Katılımcı havuzundan adalet ile rastgele kazananları seçin.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">💾</div>
+                <h3>Kayıt Arşivi</h3>
+                <p>Tüm çekiliş ve kazanan bilgilerini detaylı şekilde kayıt altına alın.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">⚡</div>
+                <h3>Gerçek Zamanlı İzleme</h3>
+                <p>YouTube canlı yayının anında yorumlarını takip edin ve işleyin.</p>
+            </div>
+        </div>
+    </section>
+
+    <section style="padding: 80px 40px; background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin: 40px 0;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; text-align: center; margin-bottom: 40px; letter-spacing: -0.01em;">Daha Fazla Bilgi Al</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px;">
+                <a href="youtube-canli-yorum-takip-blog.html" style="display: block; background: var(--bg); border: 1px solid var(--border); padding: 28px; text-decoration: none; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.borderColor='var(--gold)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateY(0)'">
+                    <div style="font-size: 1.8rem; margin-bottom: 12px;">📝</div>
+                    <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 400; margin-bottom: 8px; color: var(--cream);">Blog & İpuçları</h3>
+                    <p style="color: var(--text-muted); font-size: 0.8rem; line-height: 1.6;">Sistem hakkında detaylı yazılar, ipuçları ve başarı hikayeleri.</p>
+                </a>
+                <a href="youtube-canli-yorum-takip-teknik.html" style="display: block; background: var(--bg); border: 1px solid var(--border); padding: 28px; text-decoration: none; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.borderColor='var(--gold)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateY(0)'">
+                    <div style="font-size: 1.8rem; margin-bottom: 12px;">⚙️</div>
+                    <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 400; margin-bottom: 8px; color: var(--cream);">Teknik Dokümantasyon</h3>
+                    <p style="color: var(--text-muted); font-size: 0.8rem; line-height: 1.6;">API, Firebase, mimari ve geliştirici rehberi.</p>
+                </a>
+                <a href="youtube-canli-yorum-takip-sss.html" style="display: block; background: var(--bg); border: 1px solid var(--border); padding: 28px; text-decoration: none; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.borderColor='var(--gold)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateY(0)'">
+                    <div style="font-size: 1.8rem; margin-bottom: 12px;">❓</div>
+                    <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 400; margin-bottom: 8px; color: var(--cream);">SSS</h3>
+                    <p style="color: var(--text-muted); font-size: 0.8rem; line-height: 1.6;">Sıkça sorulan 13 soru ve cevaplar.</p>
+                </a>
+                <a href="youtube-canli-yorum-takip-basariler.html" style="display: block; background: var(--bg); border: 1px solid var(--border); padding: 28px; text-decoration: none; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.borderColor='var(--gold)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateY(0)'">
+                    <div style="font-size: 1.8rem; margin-bottom: 12px;">⭐</div>
+                    <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 400; margin-bottom: 8px; color: var(--cream);">Başarı Hikayeleri</h3>
+                    <p style="color: var(--text-muted); font-size: 0.8rem; line-height: 1.6;">Müşteri referansları ve testimonyallar.</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2>30 Dakika Ücretsiz Deneyin</h2>
+        <p>Kayıt olmadan hemen başlayın. Uygulamayı tam olarak test edin ve profesyonel çekiliş sistemini deneyimleyin.</p>
+        <a href="youtube-canli-yorum-takip.html" class="btn-primary">▶ Uygulamayı Aç</a>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 YouTube Canlı Yorum Takip Sistemi. Tüm hakları saklıdır.</p>
+        <p>
+            <a href="youtube-canli-yorum-takip-iletisim.html">İletişim</a> | 
+            <a href="#">Gizlilik Politikası</a> | 
+            <a href="#">Kullanım Şartları</a>
+        </p>
+        <p>📞 0534 782 57 04</p>
+    </footer>
+
+    <div class="lang-switcher">
+        <button class="active" data-lang="tr">TR</button>
+        <button data-lang="en">EN</button>
+    </div>
+
+    <script>
+        document.querySelectorAll('.lang-switcher button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                if(lang === 'en') {
+                    window.location.href = 'youtube-canli-yorum-takip-anasayfa-en.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="YouTube Canlı Yorum Takip Sistemi nasıl kullanılır? Adım adım kılavuz ve öğretici.">
+    <title>Nasıl Çalışır | YouTube Canlı Yorum Takip Sistemi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a08;
+            --bg2: #111110;
+            --cream: #ffffff;
+            --gold: #c9a84c;
+            --text-muted: #9a9a94;
+            --border: #2a2a26;
+        }
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--cream);
+            -webkit-font-smoothing: antialiased;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10,10,8,0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 40px;
+        }
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        header .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--gold);
+            text-decoration: none;
+        }
+        header .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+        header .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+        header .nav-links a:hover {
+            color: var(--gold);
+        }
+        header .cta-btn {
+            background: var(--cream);
+            color: var(--bg);
+            padding: 8px 20px;
+            border: none;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background 0.3s;
+        }
+        header .cta-btn:hover {
+            background: var(--gold);
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 140px 40px 80px;
+        }
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.8rem;
+            font-weight: 300;
+            margin-bottom: 40px;
+            letter-spacing: -0.02em;
+        }
+        .guide-section {
+            margin-bottom: 60px;
+            border-left: 3px solid var(--gold);
+            padding-left: 32px;
+        }
+        .guide-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 400;
+            margin-bottom: 16px;
+        }
+        .steps {
+            counter-reset: step-counter;
+            list-style: none;
+        }
+        .steps li {
+            counter-increment: step-counter;
+            margin-bottom: 24px;
+            padding-left: 0;
+            position: relative;
+        }
+        .steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: -40px;
+            top: 0;
+            width: 28px;
+            height: 28px;
+            background: var(--gold);
+            color: var(--bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        .steps li strong {
+            color: var(--cream);
+            font-weight: 600;
+        }
+        .steps li p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            line-height: 1.7;
+            margin-top: 6px;
+        }
+        .tip-box {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--gold);
+            padding: 20px;
+            margin: 24px 0;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+        .tip-box strong {
+            color: var(--gold);
+        }
+        footer {
+            padding: 40px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            margin-top: 80px;
+        }
+        footer p {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
+            margin-bottom: 8px;
+        }
+        @media (max-width: 768px) {
+            header { padding: 12px 20px; }
+            .container { padding: 100px 20px 60px; }
+            h1 { font-size: 2rem; }
+            .guide-section { padding-left: 20px; }
+            .steps li::before { left: -36px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="youtube-canli-yorum-takip-anasayfa.html" class="logo">▶ LiveTrack</a>
+            <ul class="nav-links">
+                <li><a href="youtube-canli-yorum-takip-anasayfa.html#features">Özellikler</a></li>
+                <li><a href="youtube-canli-yorum-takip-hakkinda.html">Hakkında</a></li>
+                <li><a href="youtube-canli-yorum-takip-ozellikleri.html">Tüm Özellikler</a></li>
+            </ul>
+            <a href="youtube-canli-yorum-takip.html" class="cta-btn">Uygulamaya Git</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Nasıl Çalışır?</h1>
+
+        <div class="guide-section">
+            <h2>🚀 İlk Başlangıç</h2>
+            <ul class="steps">
+                <li>
+                    <strong>Uygulamaya Giriş Yapın</strong>
+                    <p>Google hesabınızla hızlıca giriş yapın. İlk kez kullanıyorsanız 15 dakika ücretsiz deneme hakkınız vardır.</p>
+                </li>
+                <li>
+                    <strong>Canlı Yayının URL'sini Girin</strong>
+                    <p>YouTube canlı yayının URL'sini veya video ID'sini "Canlı Yayın" bölümüne yapıştırın.</p>
+                </li>
+                <li>
+                    <strong>Başlat Butonunu Tıklayın</strong>
+                    <p>Sistem otomatik olarak yayına bağlanır ve yorumları toplamaya başlar. Sol panel açılacak ve gerçek zamanlı yorum akışı görülecektir.</p>
+                </li>
+            </ul>
+            <div class="tip-box">
+                <strong>💡 İpucu:</strong> Canlı yayın aktif değilse veya hatalı URL girilirse sistem sizi uyaracaktır.
+            </div>
+        </div>
+
+        <div class="guide-section">
+            <h2>🎯 İlk Yazan Yöntemi</h2>
+            <ul class="steps">
+                <li>
+                    <strong>"İlk Yazan" Sekmesini Açın</strong>
+                    <p>Sol panelde "İlk Yazan" sekmesine tıklayın.</p>
+                </li>
+                <li>
+                    <strong>Takip Edilecek Kelimeyi Yazın</strong>
+                    <p>Örn: "hediye", "katılıyorum", "helo" gibi bir kelime girin. Bu kelimeyi ilk yazan kişi kazanacak.</p>
+                </li>
+                <li>
+                    <strong>Takibi Başlatın</strong>
+                    <p>"Başlat" butonuna tıklayın. Sistem belirttiğiniz kelimeyi içeren ilk yorumu bulup kazananı otomatik işaretleyecektir.</p>
+                </li>
+                <li>
+                    <strong>Kazananı Kaydedin</strong>
+                    <p>Kazanan bulunduğunda "Kaydet" butonu aktif hale gelecek. Tıklayarak çekiliş sonucunu arşive ekleyin.</p>
+                </li>
+            </ul>
+            <div class="tip-box">
+                <strong>💡 İpucu:</strong> Kelime araması büyük/küçük harf duyarlı değildir. "Hediye" ve "hediye" aynı şekilde bulunur.
+            </div>
+        </div>
+
+        <div class="guide-section">
+            <h2>📊 Sıralı Yazan Yöntemi</h2>
+            <ul class="steps">
+                <li>
+                    <strong>"Sıralı" Sekmesini Açın</strong>
+                    <p>Sol panelde "Sıralı" sekmesine geçin.</p>
+                </li>
+                <li>
+                    <strong>Kelime ve Sayı Belirleyin</strong>
+                    <p>Takip edilecek kelimeyi ve kaç kişi listelenecek sayısını girin (örn: 10 kişi).</p>
+                </li>
+                <li>
+                    <strong>Takibi Başlatın</strong>
+                    <p>Sistem belirlediğiniz kelimeyi yazan ilk N kişiyi sırasıyla listeleyecektir. Her kişi yalnızca bir kez listelenir.</p>
+                </li>
+                <li>
+                    <strong>Listeyi Kaydedin</strong>
+                    <p>İstediğiniz sayıya ulaşıldığında "Kaydet" ile çekiliş sonucunu arşive ekleyin.</p>
+                </li>
+            </ul>
+            <div class="tip-box">
+                <strong>💡 İpucu:</strong> Bu yöntem adil ve kronolojik çekiliş yapmak için idealdir.
+            </div>
+        </div>
+
+        <div class="guide-section">
+            <h2>🏆 En Yüksek Sayı Yöntemi</h2>
+            <ul class="steps">
+                <li>
+                    <strong>"En Yüksek" Sekmesini Açın</strong>
+                    <p>Sol panelde "En Yüksek" sekmesine tıklayın.</p>
+                </li>
+                <li>
+                    <strong>Takibi Başlatın</strong>
+                    <p>Sistem tüm yorumları tarar ve içlerindeki sayıları bulur.</p>
+                </li>
+                <li>
+                    <strong>Kazanan Seçilecektir</strong>
+                    <p>En yüksek sayı yazıldıkça kazanan otomatik güncellenir. Kullanıcı adındaki sayılar sayılmaz.</p>
+                </li>
+                <li>
+                    <strong>Sonucu Kaydedin</strong>
+                    <p>Çekiliş bittiğinde "Kaydet" butonuna tıklayarak sonucu arşive alın.</p>
+                </li>
+            </ul>
+            <div class="tip-box">
+                <strong>💡 İpucu:</strong> Ondalık sayılar da desteklenir. 99.5, 1000, 42 gibi sayılar bulunabilir.
+            </div>
+        </div>
+
+        <div class="guide-section">
+            <h2>🎲 Rastgele Çekiliş Yöntemi</h2>
+            <ul class="steps">
+                <li>
+                    <strong>"Rastgele" Sekmesini Açın</strong>
+                    <p>Sol panelde "Rastgele" sekmesine geçin.</p>
+                </li>
+                <li>
+                    <strong>Opsiyonel: Kelime Filtresi Ekleyin</strong>
+                    <p>Belirli bir kelimeyi yazan kişileri seçmek istiyorsanız girin. Boş bırakabilirsiniz.</p>
+                </li>
+                <li>
+                    <strong>Kazanan Sayısını Belirleyin</strong>
+                    <p>Kaç kişi seçilecekse sayısını girin (örn: 3 kazanan).</p>
+                </li>
+                <li>
+                    <strong>"Çekiliş Yap" Butonuna Tıklayın</strong>
+                    <p>Sistem rastgele kazananları seçecek. Aynı kişi birden fazla kez seçilmeyecektir.</p>
+                </li>
+                <li>
+                    <strong>Sonucu Kaydedin</strong>
+                    <p>"Kaydet" butonuna tıklayarak çekiliş sonucunu arşive ekleyin.</p>
+                </li>
+            </ul>
+            <div class="tip-box">
+                <strong>💡 İpucu:</strong> Yorum havuzu bilgisi sol üstte görülür. Kaç yorumcu olduğunu kontrol edebilirsiniz.
+            </div>
+        </div>
+
+        <div class="guide-section">
+            <h2>📋 Kayıtları Yönetme</h2>
+            <ul class="steps">
+                <li>
+                    <strong>Sağ Panele Bakın</strong>
+                    <p>Tüm kayıtlı çekiliş sonuçları sağ panelde görülür.</p>
+                </li>
+                <li>
+                    <strong>Kayıt Adı Verme</strong>
+                    <p>Kaydet butonuna tıklayınca modal açılır. Çekiliş için isim verin (örn: "14 Mart Çekiliş").</p>
+                </li>
+                <li>
+                    <strong>Kayıtları Silme</strong>
+                    <p>Her kayıt kartında × butonu vardır. Tıklayarak sileb ilirsiniz.</p>
+                </li>
+                <li>
+                    <strong>Tüm Kayıtları Temizleme</strong>
+                    <p>Sağ panelin üstünde "Temizle" butonu vardır. Tüm kayıtları siler.</p>
+                </li>
+            </ul>
+            <div class="tip-box">
+                <strong>💡 İpucu:</strong> Kayıtlar tarayıcı depolanması kullanılarak saklanır. Browserı temizlerseniz silinir.
+            </div>
+        </div>
+
+        <div class="guide-section">
+            <h2>⏱️ Deneme Süresi & Sınırlamalar</h2>
+            <ul class="steps">
+                <li>
+                    <strong>15 Dakika Ücretsiz Deneme</strong>
+                    <p>İlk kullanımda 15 dakika tamamen ücretsiz kullanabilirsiniz. Geri sayıcı sol panelin alt kısmında görülür.</p>
+                </li>
+                <li>
+                    <strong>Premium Erişim</strong>
+                    <p>Sınırsız erişim için 0534 782 57 04 numarasına iletişim kurun.</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 YouTube Canlı Yorum Takip Sistemi</p>
+        <p><a href="youtube-canli-yorum-takip-anasayfa.html">Ana Sayfa</a> | <a href="youtube-canli-yorum-takip-iletisim.html">İletişim</a></p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="YouTube Canlı Yorum Takip Sistemi Teknik Dokümantasyon. API ve entegrasyon bilgileri.">
+    <title>Teknik Dokümantasyon | YouTube Canlı Yorum Takip Sistemi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a08;
+            --bg2: #111110;
+            --cream: #ffffff;
+            --gold: #c9a84c;
+            --text-muted: #9a9a94;
+            --border: #2a2a26;
+        }
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--cream);
+            -webkit-font-smoothing: antialiased;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10,10,8,0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 40px;
+        }
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        header .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--gold);
+            text-decoration: none;
+        }
+        header .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+        header .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+        header .nav-links a:hover {
+            color: var(--gold);
+        }
+        header .cta-btn {
+            background: var(--cream);
+            color: var(--bg);
+            padding: 8px 20px;
+            border: none;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background 0.3s;
+        }
+        header .cta-btn:hover {
+            background: var(--gold);
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 140px 40px 80px;
+        }
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.8rem;
+            font-weight: 300;
+            margin-bottom: 40px;
+            letter-spacing: -0.02em;
+        }
+        .doc-section {
+            margin-bottom: 48px;
+            border-left: 3px solid var(--gold);
+            padding-left: 32px;
+        }
+        .doc-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 400;
+            margin-bottom: 16px;
+        }
+        .doc-section p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+        .code-block {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--gold);
+            padding: 16px;
+            margin: 16px 0;
+            font-size: 0.75rem;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+        .code-block code {
+            color: var(--gold);
+            font-family: 'DM Mono', monospace;
+        }
+        .feature-table {
+            width: 100%;
+            margin: 16px 0;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+        .feature-table th {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            padding: 12px;
+            text-align: left;
+            color: var(--gold);
+            font-weight: 600;
+        }
+        .feature-table td {
+            border: 1px solid var(--border);
+            padding: 10px 12px;
+            color: var(--text-muted);
+        }
+        footer {
+            padding: 40px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            margin-top: 80px;
+        }
+        footer p {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
+            margin-bottom: 8px;
+        }
+        @media (max-width: 768px) {
+            header { padding: 12px 20px; }
+            .container { padding: 100px 20px 60px; }
+            h1 { font-size: 2rem; }
+            .doc-section { padding-left: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="youtube-canli-yorum-takip-anasayfa.html" class="logo">▶ LiveTrack</a>
+            <ul class="nav-links">
+                <li><a href="youtube-canli-yorum-takip-anasayfa.html#features">Özellikler</a></li>
+                <li><a href="youtube-canli-yorum-takip-hakkinda.html">Hakkında</a></li>
+                <li><a href="youtube-canli-yorum-takip-nasil-calisir.html">Nasıl Çalışır</a></li>
+            </ul>
+            <a href="youtube-canli-yorum-takip.html" class="cta-btn">Uygulamaya Git</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Teknik Dokümantasyon</h1>
+
+        <div class="doc-section">
+            <h2>1. Sistem Mimarisi</h2>
+            <p>
+                YouTube Canlı Yorum Takip Sistemi, tamamen istemci tarafında çalışan bir web uygulamasıdır. 
+                Veritabanı işlemleri Firebase üzerinden yönetilir, API çağrıları YouTube Data API v3 kullanılarak yapılır.
+            </p>
+            <p><strong>Stack:</strong> HTML5 + CSS3 + Vanilla JavaScript + Firebase + YouTube API</p>
+        </div>
+
+        <div class="doc-section">
+            <h2>2. YouTube API Entegrasyonu</h2>
+            <p>Sistem, Google Cloud Console'da oluşturulmuş bir API key kullanır.</p>
+            <div class="code-block">
+                <code>
+                    // Video ID'den canlı sohbet ID'sini al<br>
+                    const videoId = "dQw4w9WgXcQ";<br>
+                    const response = await fetch(`<br>
+                    https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=liveStreamingDetails&key=${apiKey}<br>
+                    `);<br>
+                    const activeLiveChatId = response.items[0].liveStreamingDetails.activeLiveChatId;
+                </code>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2>3. Firebase Konfigürasyonu</h2>
+            <p>Kullanıcı verisi ve sistem ayarları Firebase Firestore'da saklanır.</p>
+            <div class="code-block">
+                <code>
+                    apiKey: "AIzaSyCJXT78Fisf08zG9jlRe89CBul_kwjYVmA"<br>
+                    projectId: "livechat-d12f9"<br>
+                    storageBucket: "livechat-d12f9.firebasestorage.app"
+                </code>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2>4. Veri Depolama Yapısı</h2>
+            <table class="feature-table">
+                <tr>
+                    <th>Koleksiyon</th>
+                    <th>Döküman</th>
+                    <th>Alanlar</th>
+                </tr>
+                <tr>
+                    <td>users</td>
+                    <td>{uid}</td>
+                    <td>email, displayName, photoURL, createdAt, trialStartedAt, hasFullAccess</td>
+                </tr>
+                <tr>
+                    <td>config</td>
+                    <td>settings</td>
+                    <td>apiKeys[], trialDurationMinutes, quotaTotalMinutes, refreshInterval</td>
+                </tr>
+                <tr>
+                    <td>records</td>
+                    <td>{recordId}</td>
+                    <td>title, type (first/sequential/highest/random), winners[], date</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="doc-section">
+            <h2>5. localStorage Yapısı</h2>
+            <p>Yerel veriler tarayıcıda şu format ile saklanır:</p>
+            <div class="code-block">
+                <code>
+                    // Kayıtlar<br>
+                    localStorage.setItem('yt_records', JSON.stringify(records));<br>
+                    <br>
+                    // Dil tercihi<br>
+                    localStorage.setItem('appLang', 'tr');<br>
+                    <br>
+                    // Çekiliş sonuçları<br>
+                    // Her çekiliş: { id, title, type, winners[], date }
+                </code>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2>6. API Rate Limiting</h2>
+            <p>YouTube API'ın günlük limitleri:</p>
+            <table class="feature-table">
+                <tr>
+                    <th>Operasyon</th>
+                    <th>Günlük Limit</th>
+                    <th>Açıklama</th>
+                </tr>
+                <tr>
+                    <td>Live Chat Mesaj Oku</td>
+                    <td>100,000</td>
+                    <td>Her mesaj 200 kredi tüketir</td>
+                </tr>
+                <tr>
+                    <td>Video Detayı</td>
+                    <td>100,000</td>
+                    <td>Her sorgu 1 kredi tüketir</td>
+                </tr>
+                <tr>
+                    <td>Toplam Günlük</td>
+                    <td>1,000,000</td>
+                    <td>Tüm API operasyonları</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="doc-section">
+            <h2>7. Hata Yönetimi</h2>
+            <p>Sistem, yaygın hataları otomatik olarak yönetir:</p>
+            <p>
+                ✓ <strong>Geçersiz Video ID:</strong> Kullanıcıya bildirilir<br>
+                ✓ <strong>Canlı Yayın Bulunamadı:</strong> "Yayın aktif değil" mesajı<br>
+                ✓ <strong>API Hatası:</strong> Hata kodu gösterilir ve anahtar değiştirilir<br>
+                ✓ <strong>Bağlantı Hatası:</strong> Otomatik yeniden bağlantı denenir
+            </p>
+        </div>
+
+        <div class="doc-section">
+            <h2>8. Performans Optimizasyonları</h2>
+            <p>
+                ✓ <strong>Comment Deduplication:</strong> Aynı yorum iki kez işlenmez (Set kullanımı)<br>
+                ✓ <strong>Scroll Virtualization:</strong> Çok sayıda yorum için performans<br>
+                ✓ <strong>Lazy Loading:</strong> Resimleri ve kaynakları isteğe bağlı yükleme<br>
+                ✓ <strong>Local Caching:</strong> Veriler tarayıcıda saklanır, sunucudan değil
+            </p>
+        </div>
+
+        <div class="doc-section">
+            <h2>9. Güvenlik Önlemleri</h2>
+            <p>
+                ✓ <strong>XSS Koruması:</strong> HTML escape işlemi (escHtml fonksiyonu)<br>
+                ✓ <strong>CSRF Koruması:</strong> Firebase kimlik doğrulaması<br>
+                ✓ <strong>API Key Güvenliği:</strong> Key rotasyonu ve sınırlama<br>
+                ✓ <strong>Veri Şifreleme:</strong> HTTPS üzerinde iletim
+            </p>
+        </div>
+
+        <div class="doc-section">
+            <h2>10. Geliştirme için İpuçları</h2>
+            <p>
+                <strong>Yerel Test:</strong> `python -m http.server` ile localhost'da çalıştırabilirsiniz.<br>
+                <strong>Debugging:</strong> Chrome DevTools Console ve Network sekmesini kullanın.<br>
+                <strong>API Testing:</strong> Postman ile YouTube API'ı test edin.<br>
+                <strong>Performance:</strong> DevTools Lighthouse ile performans kontrol edin.
+            </p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 YouTube Canlı Yorum Takip Sistemi</p>
+        <p><a href="youtube-canli-yorum-takip-anasayfa.html">Ana Sayfa</a> | <a href="youtube-canli-yorum-takip-iletisim.html">İletişim</a></p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="YouTube Canlı Yorum Takip Sistemi hakkında sıkça sorulan sorular ve cevapları.">
+    <title>SSS | YouTube Canlı Yorum Takip Sistemi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a08;
+            --bg2: #111110;
+            --cream: #ffffff;
+            --gold: #c9a84c;
+            --text-muted: #9a9a94;
+            --border: #2a2a26;
+        }
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--cream);
+            -webkit-font-smoothing: antialiased;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10,10,8,0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 40px;
+        }
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        header .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--gold);
+            text-decoration: none;
+        }
+        header .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+        header .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+        header .nav-links a:hover {
+            color: var(--gold);
+        }
+        header .cta-btn {
+            background: var(--cream);
+            color: var(--bg);
+            padding: 8px 20px;
+            border: none;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background 0.3s;
+        }
+        header .cta-btn:hover {
+            background: var(--gold);
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 140px 40px 80px;
+        }
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.8rem;
+            font-weight: 300;
+            margin-bottom: 40px;
+            letter-spacing: -0.02em;
+        }
+        .faq-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 48px;
+        }
+        .category-btn {
+            padding: 12px 16px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            font-family: 'DM Mono', monospace;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .category-btn:hover,
+        .category-btn.active {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        .faq-list {
+            display: grid;
+            gap: 16px;
+        }
+        .faq-item {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .faq-item:hover {
+            border-color: var(--gold);
+        }
+        .faq-question {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--cream);
+            font-weight: 500;
+        }
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--gold);
+            transition: transform 0.3s;
+        }
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+        .faq-answer {
+            display: none;
+            padding: 0 20px 20px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            line-height: 1.8;
+            border-top: 1px solid var(--border);
+        }
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+        footer {
+            padding: 40px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            margin-top: 80px;
+        }
+        footer p {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
+            margin-bottom: 8px;
+        }
+        @media (max-width: 768px) {
+            header { padding: 12px 20px; }
+            .container { padding: 100px 20px 60px; }
+            h1 { font-size: 2rem; }
+            .faq-categories { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="youtube-canli-yorum-takip-anasayfa.html" class="logo">▶ LiveTrack</a>
+            <ul class="nav-links">
+                <li><a href="youtube-canli-yorum-takip-anasayfa.html#features">Özellikler</a></li>
+                <li><a href="youtube-canli-yorum-takip-hakkinda.html">Hakkında</a></li>
+                <li><a href="youtube-canli-yorum-takip-nasil-calisir.html">Nasıl Çalışır</a></li>
+            </ul>
+            <a href="youtube-canli-yorum-takip.html" class="cta-btn">Uygulamaya Git</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Sıkça Sorulan Sorular</h1>
+
+        <div class="faq-list" id="faqList">
+            <div class="faq-item">
+                <div class="faq-question">Sistemi kullanmak için ne gerekli?</div>
+                <div class="faq-answer">
+                    Sadece bir Google hesabı, İnternet bağlantısı ve canlı yayının YouTube URL'si yeterli. Uygulama tamamen tarayıcıda çalışır, indirme gerekmez.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">15 dakika ücretsiz deneme nasıl çalışır?</div>
+                <div class="faq-answer">
+                    İlk kez giriş yaptığınızda otomatik olarak 30 dakikalık deneme hakkı verilir. Bu süre içinde tüm özellikleri test edebilirsiniz. Geri sayıcı sol panelde görülür. 30 dakika dolduktan sonra premium paketi satın almanız gerekir.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Birden fazla canlı yayın takip edilebilir mi?</div>
+                <div class="faq-answer">
+                    Evet, sistemi birkaç kez yeniden başlatarak farklı yayınları takip edebilirsiniz. Her sefer için yeni URL girin ve Başlat'a tıklayın.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Kazananlar silinebilir mi?</div>
+                <div class="faq-answer">
+                    Evet. Sağ panelde her kayıt kartında × butonu vardır. Tıklayarak sileb ilirsiniz. Ya da tüm kayıtları bir kez "Temizle" ile silebilirsiniz.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Verilerim nereye kaydediliyor?</div>
+                <div class="faq-answer">
+                    Tüm veriler tarayıcı depolanmasında (localStorage) saklanır. Sunucumuza gönderilmez, tamamen güvenlidir. Browserı temizlerseniz silinir.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">API key nedir ve niye gerekli?</div>
+                <div class="faq-answer">
+                    API key, YouTube'a erişim için gerekli bir kod. Sistem, bu kod sayesinde canlı yayınlara bağlanır ve yorumları çekebilir. Güvenlidir.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Sistem çevrimdışı çalışabilir mi?</div>
+                <div class="faq-answer">
+                    Hayır. YouTube'a bağlanmak için İnternet bağlantısı gerekli. Ancak kayıtlar çevrimdışı görüntülenebilir.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Mobil telefonda kullanılabilir mi?</div>
+                <div class="faq-answer">
+                    Evet. Sistem tamamen responsive. Telefon, tablet ve masaüstünde aynı şekilde çalışır.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Teknik sorunla karşılaşırsam ne yapmalıyım?</div>
+                <div class="faq-answer">
+                    İlk olarak browserı yenileyin ve cookies temizleyin. Sorun devam ederse 0534 782 57 04'ü arayın veya WhatsApp yazın. Teknik ekip yardımcı olacaktır.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Premium'a geçtikten sonra deneme sonlandırılır mı?</div>
+                <div class="faq-answer">
+                    Hayır. Premium'a geçerseniz deneme süresi durdurulur ve sınırsız erişim başlar. Daha sonra (veya önceden) başka cihazlardan ücretsiz deneme yapabilirsiniz.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Dil değiştirebilir miyim?</div>
+                <div class="faq-answer">
+                    Evet. Uygulamada sağ altta dil değiştirme seçeneği vardır. TR/EN arasında seçim yapabilirsiniz.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">En yüksek sayı modunda ondalık sayılar kabul edilir mi?</div>
+                <div class="faq-answer">
+                    Evet. 99.5, 100.75 gibi ondalık sayılar da bulunur. Sistem tüm sayı formatlarını destekler.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Rastgele çekiliş adil mi?</div>
+                <div class="faq-answer">
+                    Evet. Sistem matematiksel olarak rastgele seçer. Kimse avantajlı değildir. Seçilen kişiler tekrar seçilmez.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 YouTube Canlı Yorum Takip Sistemi</p>
+        <p><a href="youtube-canli-yorum-takip-anasayfa.html">Ana Sayfa</a> | <a href="youtube-canli-yorum-takip-iletisim.html">İletişim</a></p>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>

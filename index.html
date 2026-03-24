@@ -1,0 +1,2270 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Studio — Web Design & Code</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a08;
+      --bg2: #111110;
+      --cream: #f5f0e8;
+      --gold: #c9a84c;
+      --gold-dim: #8a6e2f;
+      --rust: #b84a2e;
+      --muted: #4a4a44;
+      --border: #2a2a26;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'DM Mono', monospace;
+      cursor: none;
+      overflow-x: hidden;
+    }
+
+    /* ── CURSOR ── */
+    #cursor {
+      position: fixed; top: 0; left: 0; z-index: 9999;
+      width: 10px; height: 10px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%,-50%);
+      transition: transform .1s, width .25s, height .25s, background .25s;
+      mix-blend-mode: difference;
+    }
+    #cursor.hover { width: 36px; height: 36px; background: var(--cream); }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: .032;
+      pointer-events: none;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.6rem 3rem;
+      border-bottom: 1px solid transparent;
+      transition: border-color .4s, background .4s;
+    }
+    nav.scrolled { border-color: var(--border); background: rgba(10,10,8,.85); backdrop-filter: blur(12px); }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: .08em;
+      color: var(--cream);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-size: .7rem; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none;
+      transition: color .25s;
+    }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-cta {
+      font-size: .7rem; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--bg); background: var(--gold);
+      padding: .55rem 1.4rem; text-decoration: none;
+      transition: background .25s;
+    }
+    .nav-cta:hover { background: var(--cream); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      padding-top: 5rem;
+      overflow: hidden;
+    }
+    .hero-left {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 5rem 3rem 5rem 3rem;
+      position: relative; z-index: 2;
+    }
+    .hero-tag {
+      font-size: .65rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 2rem;
+      display: flex; align-items: center; gap: .8rem;
+      opacity: 0; animation: fadeUp .8s .2s forwards;
+    }
+    .hero-tag::before { content: ''; width: 32px; height: 1px; background: var(--gold); }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 6vw, 6rem);
+      font-weight: 300;
+      line-height: 1.04;
+      color: var(--cream);
+      opacity: 0; animation: fadeUp .9s .4s forwards;
+    }
+    .hero-title em { font-style: italic; color: var(--gold); }
+    .hero-desc {
+      margin-top: 2rem;
+      font-size: .78rem; line-height: 1.8; color: var(--muted);
+      max-width: 380px;
+      opacity: 0; animation: fadeUp .9s .6s forwards;
+    }
+    .hero-bullets {
+      margin-top: 1.4rem;
+      display: flex; flex-direction: column; gap: .6rem;
+      opacity: 0; animation: fadeUp .9s .7s forwards;
+    }
+    .hero-bullet {
+      display: flex; align-items: center; gap: .7rem;
+      font-size: .68rem; letter-spacing: .06em; color: var(--muted);
+      line-height: 1.5;
+    }
+    .hb-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--gold); flex-shrink: 0;
+    }
+    .hero-actions {
+      margin-top: 3rem; display: flex; gap: 1.2rem; align-items: center;
+      opacity: 0; animation: fadeUp .9s .8s forwards;
+    }
+    .btn-primary {
+      font-family: 'DM Mono', monospace;
+      font-size: .7rem; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--bg); background: var(--cream);
+      padding: .9rem 2.2rem; text-decoration: none; display: inline-block;
+      transition: background .25s, color .25s;
+    }
+    .btn-primary:hover { background: var(--gold); }
+    .btn-ghost {
+      font-size: .7rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px; transition: color .25s, border-color .25s;
+    }
+    .btn-ghost:hover { color: var(--cream); border-color: var(--cream); }
+
+    .hero-right {
+      position: relative; overflow: hidden;
+      opacity: 0; animation: fadeIn 1.2s .5s forwards;
+    }
+    .hero-right::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, var(--bg) 0%, transparent 30%);
+    }
+    .hero-grid-visual {
+      position: absolute; inset: 0;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 2px; padding: 5rem 2rem 2rem;
+    }
+    .hg-cell {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    .hg-cell::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--gold-dim) 0%, transparent 60%);
+      opacity: 0; transition: opacity .4s;
+    }
+    .hg-cell:hover::before { opacity: .25; }
+    .hg-cell:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+    .hg-cell:nth-child(3) { grid-row: span 2; }
+    .hg-cell.accent { background: var(--gold-dim); opacity: .4; }
+
+    .hero-stat-bar {
+      position: absolute; bottom: 3rem; left: 3rem; z-index: 10;
+      display: flex; gap: 3rem;
+      opacity: 0; animation: fadeUp .9s 1s forwards;
+    }
+    .stat { display: flex; flex-direction: column; }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.4rem; letter-spacing: .04em; color: var(--cream);
+      line-height: 1;
+    }
+    .stat-label { font-size: .6rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-top: .3rem; }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden; padding: 1rem 0;
+      background: var(--bg2);
+    }
+    .marquee-track {
+      display: flex; gap: 3rem; width: max-content;
+      animation: scroll 22s linear infinite;
+    }
+    .marquee-item {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem; letter-spacing: .14em; white-space: nowrap;
+      color: var(--muted); display: flex; align-items: center; gap: 1.2rem;
+    }
+    .marquee-item span { color: var(--gold); font-size: .7rem; }
+
+    /* ── SERVICES ── */
+    #services { padding: 8rem 3rem; }
+
+    .section-label {
+      font-size: .65rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--gold); display: flex; align-items: center; gap: .8rem;
+      margin-bottom: 4rem;
+    }
+    .section-label::before { content: ''; width: 32px; height: 1px; background: var(--gold); }
+
+    /* Services intro header */
+    .services-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 4rem; flex-wrap: wrap; gap: 2rem;
+    }
+    .services-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      font-weight: 300; line-height: 1.1;
+    }
+    .services-headline em { font-style: italic; color: var(--gold); }
+    .services-count {
+      font-size: .65rem; letter-spacing: .16em; color: var(--muted);
+      text-transform: uppercase;
+    }
+    .services-count strong { color: var(--gold); font-weight: 400; }
+
+    /* Services grid — 5 columns */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    /* Hidden cards */
+    .service-card.hidden {
+      display: none;
+    }
+
+    .service-card {
+      background: var(--bg);
+      padding: 2.2rem 1.8rem;
+      position: relative; overflow: hidden;
+      transition: background .3s;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 2px; background: var(--gold);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .4s;
+    }
+    .service-card:hover { background: var(--bg2); }
+    .service-card:hover::before { transform: scaleX(1); }
+
+    .service-cat-label {
+      font-size: .55rem; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--gold-dim); margin-bottom: .8rem;
+    }
+    .service-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: .8rem; letter-spacing: .1em;
+      color: var(--gold-dim); margin-bottom: 1rem;
+    }
+    .service-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem; font-weight: 300; line-height: 1.2;
+      color: var(--cream); margin-bottom: .8rem;
+    }
+    .service-desc { font-size: .67rem; line-height: 1.8; color: var(--muted); }
+
+    .service-list {
+      margin-top: 1rem; list-style: none;
+      display: flex; flex-direction: column; gap: .35rem;
+    }
+    .service-list li {
+      font-size: .62rem; letter-spacing: .04em; color: var(--muted);
+      padding-left: .9rem; position: relative; line-height: 1.5;
+    }
+    .service-list li::before {
+      content: '→';
+      position: absolute; left: 0;
+      color: var(--gold-dim); font-size: .58rem;
+    }
+    .service-tags { margin-top: 1.2rem; display: flex; flex-wrap: wrap; gap: .35rem; }
+    .tag {
+      font-size: .55rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--gold); border: 1px solid var(--gold-dim);
+      padding: .2rem .6rem;
+    }
+
+    /* Show more button */
+    .services-more-wrap {
+      display: flex; justify-content: center;
+      margin-top: 3rem;
+    }
+    .btn-show-more {
+      font-family: 'DM Mono', monospace;
+      font-size: .7rem; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--cream); background: transparent;
+      border: 1px solid var(--border);
+      padding: 1rem 2.8rem; cursor: none;
+      display: flex; align-items: center; gap: .8rem;
+      transition: border-color .25s, color .25s, background .25s;
+    }
+    .btn-show-more:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-show-more .arrow {
+      display: inline-block;
+      transition: transform .3s;
+    }
+    .btn-show-more.open .arrow { transform: rotate(180deg); }
+
+    /* ── WORKS ── */
+    #works { padding: 8rem 3rem; }
+    .works-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 4rem;
+    }
+    .works-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      font-weight: 300; line-height: 1.1;
+    }
+    .works-title em { font-style: italic; color: var(--gold); }
+
+    /* 5-col projects grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+    .project-card {
+      position: relative; overflow: hidden;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      cursor: none;
+      transition: border-color .3s;
+    }
+    .project-card:hover { border-color: var(--gold-dim); }
+
+    .project-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: var(--bg);
+      position: relative; overflow: hidden;
+    }
+    .project-thumb {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      position: absolute; inset: 0;
+      transition: transform .5s;
+    }
+    .project-card:hover .project-thumb { transform: scale(1.05); }
+
+    /* Gradient placeholder when no image */
+    .project-img-placeholder {
+      width: 100%; height: 100%;
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .project-img-placeholder span {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem; color: var(--border);
+      letter-spacing: .1em;
+    }
+
+    .project-overlay {
+      position: absolute; inset: 0;
+      background: rgba(10,10,8,.75);
+      opacity: 0; transition: opacity .35s;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: .8rem;
+    }
+    .project-card:hover .project-overlay { opacity: 1; }
+    .view-btn {
+      font-size: .62rem; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--cream); border: 1px solid var(--cream);
+      padding: .6rem 1.4rem;
+      transform: translateY(8px);
+      transition: transform .3s, background .25s, color .25s;
+    }
+    .view-btn:hover { background: var(--gold); border-color: var(--gold); color: var(--bg); }
+    .project-card:hover .view-btn { transform: translateY(0); }
+
+    .project-link-btn {
+      font-size: .58rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--gold); border: 1px solid var(--gold-dim);
+      padding: .5rem 1.2rem; text-decoration: none;
+      transform: translateY(8px);
+      transition: transform .3s .04s, background .25s, color .25s;
+      display: inline-block;
+    }
+    .project-link-btn:hover { background: var(--gold); color: var(--bg); }
+    .project-card:hover .project-link-btn { transform: translateY(0); }
+
+    .project-info { padding: 1.2rem 1.4rem; }
+    .project-cat {
+      font-size: .58rem; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: .4rem;
+    }
+    .project-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; font-weight: 400; color: var(--cream);
+      line-height: 1.3;
+    }
+    .project-desc {
+      font-size: .62rem; color: var(--muted); line-height: 1.6;
+      margin-top: .4rem;
+    }
+
+    /* Loading / empty state */
+    .projects-loading {
+      grid-column: span 5;
+      display: flex; align-items: center; justify-content: center;
+      padding: 5rem; color: var(--muted);
+      font-size: .7rem; letter-spacing: .12em;
+    }
+    .projects-empty {
+      grid-column: span 5;
+      text-align: center; padding: 5rem 2rem;
+      color: var(--muted); font-size: .75rem; line-height: 1.8;
+    }
+    .projects-empty a {
+      color: var(--gold); text-decoration: none;
+      border-bottom: 1px solid var(--gold-dim);
+    }
+
+    /* Gradient placeholders */
+    .pg-1 { background: linear-gradient(135deg,#1a1a15,#2a2520); }
+    .pg-2 { background: linear-gradient(160deg,#12100e,#1e1a14); }
+    .pg-3 { background: linear-gradient(120deg,#0e1218,#151c26); }
+    .pg-4 { background: linear-gradient(135deg,#100e0c,#1c1814); }
+    .pg-5 { background: linear-gradient(90deg,#0c0c0a,#181612); }
+
+    /* ── PROCESS ── */
+    #process { padding: 8rem 3rem; background: var(--bg2); }
+    .process-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6rem; align-items: start;
+    }
+    .process-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      font-weight: 300; line-height: 1.1;
+      margin-top: 2rem;
+    }
+    .process-title em { font-style: italic; color: var(--gold); }
+    .process-desc { margin-top: 2rem; font-size: .75rem; line-height: 1.9; color: var(--muted); }
+    .step {
+      border-top: 1px solid var(--border);
+      padding: 2rem 0; position: relative;
+      transition: padding-left .3s;
+    }
+    .step:hover { padding-left: 1rem; }
+    .step-row { display: flex; align-items: flex-start; gap: 2rem; }
+    .step-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: .9rem; letter-spacing: .08em;
+      color: var(--gold-dim); flex-shrink: 0; padding-top: .15rem;
+    }
+    .step-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem; font-weight: 400; color: var(--cream);
+      margin-bottom: .5rem;
+    }
+    .step-desc { font-size: .7rem; line-height: 1.8; color: var(--muted); }
+
+    /* ── TESTIMONIALS ── */
+    #testimonials { padding: 8rem 3rem; }
+    .testimonials-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border);
+      margin-top: 4rem;
+    }
+    .testi-card {
+      background: var(--bg);
+      padding: 3rem 2.5rem;
+      transition: background .3s;
+    }
+    .testi-card:hover { background: var(--bg2); }
+    .testi-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem; font-weight: 300; font-style: italic;
+      line-height: 1.6; color: var(--cream); margin-bottom: 2rem;
+    }
+    .testi-quote::before { content: '\201C'; color: var(--gold); font-size: 2rem; line-height: 0; vertical-align: -.4rem; margin-right: .2rem; }
+    .testi-author { display: flex; align-items: center; gap: 1rem; }
+    .testi-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--gold-dim); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .9rem; color: var(--cream);
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .testi-name { font-size: .7rem; letter-spacing: .1em; color: var(--cream); text-transform: uppercase; }
+    .testi-role { font-size: .6rem; color: var(--muted); margin-top: .2rem; }
+
+    /* ── CONTACT ── */
+    #contact {
+      padding: 10rem 3rem;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    #contact::before {
+      content: '';
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .contact-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 6vw, 6.5rem);
+      font-weight: 300; line-height: 1.05;
+      max-width: 700px; margin: 2rem auto;
+    }
+    .contact-title em { font-style: italic; color: var(--gold); }
+    .contact-sub { font-size: .75rem; line-height: 1.9; color: var(--muted); max-width: 400px; margin: 0 auto 3rem; }
+    .contact-email {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.2rem, 2.5vw, 2rem);
+      font-weight: 300; color: var(--cream);
+      text-decoration: none; border-bottom: 1px solid var(--gold-dim);
+      padding-bottom: .3rem; transition: color .25s, border-color .25s;
+    }
+    .contact-email:hover { color: var(--gold); border-color: var(--gold); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 3rem;
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--bg2);
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem; letter-spacing: .12em;
+      color: var(--cream); text-decoration: none;
+    }
+    .footer-logo span { color: var(--gold); }
+    .footer-copy { font-size: .6rem; letter-spacing: .1em; color: var(--muted); }
+    .footer-socials { display: flex; gap: 1.5rem; }
+    .footer-socials a {
+      font-size: .6rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; transition: color .25s;
+    }
+    .footer-socials a:hover { color: var(--cream); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+    @keyframes scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity .9s, transform .9s;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      #hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero-left { padding: 8rem 1.5rem 4rem; }
+      .hero-stat-bar { left: 1.5rem; }
+      #services, #works, #process, #testimonials, #contact { padding: 5rem 1.5rem; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .projects-grid { grid-template-columns: repeat(2, 1fr); }
+      .project-card:nth-child(n) { grid-column: span 1; }
+      .projects-loading { grid-column: span 2; }
+      .process-inner { grid-template-columns: 1fr; gap: 3rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+      .services-tabs { gap: .4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="cursor"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Web, Kodlama &amp; Tasarım Hizmetleri<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Hizmetler</a></li>
+    <li><a href="#works">Projeler</a></li>
+    <li><a href="#process">Süreç</a></li>
+    <li><a href="#testimonials">Referanslar</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">İletişim</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Lyric Sanders Dijital Ajansı</div>
+    <h1 class="hero-title">
+      Dijital<br>
+      <em>Deneyimler</em><br>
+      Tasarlıyoruz
+    </h1>
+    <p class="hero-desc">
+      Fikrinizi dinleyip markaya dönüştürüyoruz. Logo'dan web sitesine, mobil uygulamadan SEO'ya kadar 150+ hizmetle işinizi dijitalde büyütüyoruz.
+    </p>
+    <div class="hero-bullets">
+      <div class="hero-bullet"><span class="hb-dot"></span>Tasarım, yazılım ve pazarlama — tek çatı altında</div>
+      <div class="hero-bullet"><span class="hb-dot"></span>Hızlı teslim, net iletişim, sıfır sürpriz</div>
+      <div class="hero-bullet"><span class="hb-dot"></span>Yayın sonrası destek ve büyüme danışmanlığı</div>
+    </div>
+    <div class="hero-actions">
+      <a href="#works" class="btn-primary">Projeleri İncele</a>
+      <a href="#contact" class="btn-ghost">Proje Başlat →</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-grid-visual">
+      <div class="hg-cell"></div>
+      <div class="hg-cell"></div>
+      <div class="hg-cell accent"></div>
+      <div class="hg-cell"></div>
+      <div class="hg-cell"></div>
+      <div class="hg-cell"></div>
+      <div class="hg-cell"></div>
+      <div class="hg-cell"></div>
+      <div class="hg-cell accent"></div>
+    </div>
+  </div>
+  <div class="hero-stat-bar">
+    <div class="stat">
+      <span class="stat-num">48+</span>
+      <span class="stat-label">Tamamlanan Proje</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">5★</span>
+      <span class="stat-label">Müşteri Memnuniyeti</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">3yr</span>
+      <span class="stat-label">Sektör Deneyimi</span>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Web Tasarım <span>✦</span></span>
+    <span class="marquee-item">Dijital Menü Tasarımı <span>✦</span></span>
+    <span class="marquee-item">Dropdown Menü <span>✦</span></span>
+    <span class="marquee-item">E-Ticaret Siteleri <span>✦</span></span>
+    <span class="marquee-item">React &amp; Next.js <span>✦</span></span>
+    <span class="marquee-item">Mega Menü Tasarımı <span>✦</span></span>
+    <span class="marquee-item">Mobil Uyumlu Tasarım <span>✦</span></span>
+    <span class="marquee-item">Scroll Animasyonları <span>✦</span></span>
+    <span class="marquee-item">Logo Tasarımı <span>✦</span></span>
+    <span class="marquee-item">Online Sipariş Sistemi <span>✦</span></span>
+    <span class="marquee-item">Video Prodüksiyon <span>✦</span></span>
+    <span class="marquee-item">Chatbot &amp; AI <span>✦</span></span>
+    <span class="marquee-item">Hamburger Menü <span>✦</span></span>
+    <span class="marquee-item">iOS &amp; Android App <span>✦</span></span>
+    <span class="marquee-item">Popup &amp; Modal Tasarımı <span>✦</span></span>
+    <span class="marquee-item">Branding Danışmanlığı <span>✦</span></span>
+    <span class="marquee-item">Menü Baskı Tasarımı <span>✦</span></span>
+    <span class="marquee-item">Fiyatlandırma Tablosu <span>✦</span></span>
+    <span class="marquee-item">Hover Mikro-Etkileşim <span>✦</span></span>
+    <span class="marquee-item">Design System <span>✦</span></span>
+    <span class="marquee-item">Masa Rezervasyon <span>✦</span></span>
+    <span class="marquee-item">Admin Panel <span>✦</span></span>
+    <span class="marquee-item">Sticky Navbar <span>✦</span></span>
+    <span class="marquee-item">Flutter &amp; Dart <span>✦</span></span>
+    <span class="marquee-item">Ambalaj &amp; Etiket <span>✦</span></span>
+    <span class="marquee-item">Randevu Sistemi <span>✦</span></span>
+    <span class="marquee-item">SEO Optimizasyon <span>✦</span></span>
+    <span class="marquee-item">Landing Page <span>✦</span></span>
+    <span class="marquee-item">Filtreleme &amp; Arama UI <span>✦</span></span>
+    <span class="marquee-item">Sayfa Geçiş Efekti <span>✦</span></span>
+    <span class="marquee-item">Tabela Tasarımı <span>✦</span></span>
+    <span class="marquee-item">Breadcrumb Navigasyon <span>✦</span></span>
+    <span class="marquee-item">Frontend Geliştirme <span>✦</span></span>
+    <span class="marquee-item">Kurumsal Kimlik <span>✦</span></span>
+    <span class="marquee-item">Sidebar &amp; Drawer <span>✦</span></span>
+    <span class="marquee-item">Parallax Arka Plan <span>✦</span></span>
+    <span class="marquee-item">Ürün Kartı Tasarımı <span>✦</span></span>
+    <span class="marquee-item">WhatsApp Bot <span>✦</span></span>
+    <span class="marquee-item">Galeri &amp; Lightbox <span>✦</span></span>
+    <span class="marquee-item">Toast Bildirim <span>✦</span></span>
+    <span class="marquee-item">Hero Section Tasarımı <span>✦</span></span>
+    <span class="marquee-item">Tab &amp; Accordion <span>✦</span></span>
+    <span class="marquee-item">Blog Kartı Tasarımı <span>✦</span></span>
+    <span class="marquee-item">Before &amp; After Slider <span>✦</span></span>
+    <span class="marquee-item">Ekip &amp; Profil Kartı <span>✦</span></span>
+    <span class="marquee-item">Performans &amp; Hız <span>✦</span></span>
+    <span class="marquee-item">Üyelik Sistemi <span>✦</span></span>
+    <span class="marquee-item">Eğitim Platformu <span>✦</span></span>
+    <span class="marquee-item">Canlı Sohbet <span>✦</span></span>
+    <span class="marquee-item">Fatura Modülü <span>✦</span></span>
+    <span class="marquee-item">İK Paneli <span>✦</span></span>
+    <span class="marquee-item">PWA Geliştirme <span>✦</span></span>
+    <span class="marquee-item">Emlak Platformu <span>✦</span></span>
+    <span class="marquee-item">İnfografik Tasarımı <span>✦</span></span>
+    <span class="marquee-item">Pitch Deck <span>✦</span></span>
+    <span class="marquee-item">İkon Seti Tasarımı <span>✦</span></span>
+    <span class="marquee-item">Yerel SEO <span>✦</span></span>
+    <span class="marquee-item">LinkedIn Ads <span>✦</span></span>
+    <span class="marquee-item">TikTok Ads <span>✦</span></span>
+    <span class="marquee-item">ASO Optimizasyonu <span>✦</span></span>
+    <span class="marquee-item">Kullanıcı Testi <span>✦</span></span>
+    <span class="marquee-item">Onboarding Tasarımı <span>✦</span></span>
+    <span class="marquee-item">Dark Mode Tasarımı <span>✦</span></span>
+    <span class="marquee-item">Lottie Animasyon <span>✦</span></span>
+    <span class="marquee-item">Cursor Efektleri <span>✦</span></span>
+    <span class="marquee-item">Yazı Animasyonu <span>✦</span></span>
+    <span class="marquee-item">Parçacık Efekti <span>✦</span></span>
+    <span class="marquee-item">KDS Mutfak Ekranı <span>✦</span></span>
+    <span class="marquee-item">Sadakat Puan Sistemi <span>✦</span></span>
+    <span class="marquee-item">Çok Adımlı Form <span>✦</span></span>
+    <span class="marquee-item">Geri Sayım Bileşeni <span>✦</span></span>
+    <span class="marquee-item">Katalog Tasarımı <span>✦</span></span>
+    <span class="marquee-item">KVKK Uyumluluk <span>✦</span></span>
+    <span class="marquee-item">2FA Güvenlik <span>✦</span></span>
+    <span class="marquee-item">QR Kod Üreteci <span>✦</span></span>
+    <span class="marquee-item">CMS Kurulumu <span>✦</span></span>
+    <span class="marquee-item">Analitik Dashboard <span>✦</span></span>
+    <span class="marquee-item">Dijital Dönüşüm <span>✦</span></span>
+    <span class="marquee-item">Yatırımcı Sunumu <span>✦</span></span>
+    <!-- duplicate for seamless loop -->
+    <span class="marquee-item">Ekip &amp; Profil Kartı <span>✦</span></span>
+    <span class="marquee-item">Performans &amp; Hız <span>✦</span></span>
+    <span class="marquee-item">Üyelik Sistemi <span>✦</span></span>
+    <span class="marquee-item">Eğitim Platformu <span>✦</span></span>
+    <span class="marquee-item">Canlı Sohbet <span>✦</span></span>
+    <span class="marquee-item">Fatura Modülü <span>✦</span></span>
+    <span class="marquee-item">İK Paneli <span>✦</span></span>
+    <span class="marquee-item">PWA Geliştirme <span>✦</span></span>
+    <span class="marquee-item">Emlak Platformu <span>✦</span></span>
+    <span class="marquee-item">İnfografik Tasarımı <span>✦</span></span>
+    <span class="marquee-item">Pitch Deck <span>✦</span></span>
+    <span class="marquee-item">İkon Seti Tasarımı <span>✦</span></span>
+    <span class="marquee-item">Yerel SEO <span>✦</span></span>
+    <span class="marquee-item">LinkedIn Ads <span>✦</span></span>
+    <span class="marquee-item">TikTok Ads <span>✦</span></span>
+    <span class="marquee-item">ASO Optimizasyonu <span>✦</span></span>
+    <span class="marquee-item">Kullanıcı Testi <span>✦</span></span>
+    <span class="marquee-item">Onboarding Tasarımı <span>✦</span></span>
+    <span class="marquee-item">Dark Mode Tasarımı <span>✦</span></span>
+    <span class="marquee-item">Lottie Animasyon <span>✦</span></span>
+    <span class="marquee-item">Cursor Efektleri <span>✦</span></span>
+    <span class="marquee-item">Yazı Animasyonu <span>✦</span></span>
+    <span class="marquee-item">Parçacık Efekti <span>✦</span></span>
+    <span class="marquee-item">KDS Mutfak Ekranı <span>✦</span></span>
+    <span class="marquee-item">Sadakat Puan Sistemi <span>✦</span></span>
+    <span class="marquee-item">Çok Adımlı Form <span>✦</span></span>
+    <span class="marquee-item">Geri Sayım Bileşeni <span>✦</span></span>
+    <span class="marquee-item">Katalog Tasarımı <span>✦</span></span>
+    <span class="marquee-item">KVKK Uyumluluk <span>✦</span></span>
+    <span class="marquee-item">2FA Güvenlik <span>✦</span></span>
+    <span class="marquee-item">QR Kod Üreteci <span>✦</span></span>
+    <span class="marquee-item">CMS Kurulumu <span>✦</span></span>
+    <span class="marquee-item">Analitik Dashboard <span>✦</span></span>
+    <span class="marquee-item">Dijital Dönüşüm <span>✦</span></span>
+    <span class="marquee-item">Yatırımcı Sunumu <span>✦</span></span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+
+  <div class="services-header reveal">
+    <div>
+      <div class="section-label">Hizmetlerimiz</div>
+      <h2 class="services-headline">150+ <em>Uzman</em><br>Hizmet</h2>
+    </div>
+    <div class="services-count">
+      <strong>20</strong> Ana Kategori &nbsp;·&nbsp; <strong>150+</strong> Spesifik Hizmet
+    </div>
+  </div>
+
+  <div class="services-grid reveal">
+
+    <!-- WEB TASARIM -->
+    <div class="service-card">
+      <div class="service-cat-label">🌐 Web Tasarım</div>
+      <div class="service-num">01</div>
+      <h3 class="service-title">Temel Kurumsal Site</h3>
+      <p class="service-desc">3–7 sayfalık tam responsive tasarım, SEO altyapısı ve Google indeksleme uyumu.</p>
+      <div class="service-tags"><span class="tag">Responsive</span><span class="tag">SEO</span></div>
+    </div>
+    <div class="service-card">
+      <div class="service-cat-label">🌐 Web Tasarım</div>
+      <div class="service-num">02</div>
+      <h3 class="service-title">Çoklu Dil Desteği</h3>
+      <p class="service-desc">Türkçe + İngilizce veya daha fazla dilde dil seçicili kurumsal web sitesi.</p>
+      <div class="service-tags"><span class="tag">i18n</span><span class="tag">SEO</span></div>
+    </div>
+    <div class="service-card">
+      <div class="service-cat-label">🌐 Web Tasarım</div>
+      <div class="service-num">03</div>
+      <h3 class="service-title">Premium Kurumsal Site</h3>
+      <p class="service-desc">Markanıza özel benzersiz tasarım; animasyonlar ve yüksek görsel kalite.</p>
+      <div class="service-tags"><span class="tag">Özel Tasarım</span><span class="tag">Animasyon</span></div>
+    </div>
+    <div class="service-card">
+      <div class="service-cat-label">🌐 Web Tasarım</div>
+      <div class="service-num">04</div>
+      <h3 class="service-title">E-Ticaret Mağazası</h3>
+      <p class="service-desc">50'den 1000+ ürüne kadar ölçeklenen e-ticaret sistemi; sepet, ödeme, stok dahil.</p>
+      <div class="service-tags"><span class="tag">Shopify</span><span class="tag">WooCommerce</span></div>
+    </div>
+    <div class="service-card">
+      <div class="service-cat-label">🌐 Web Tasarım</div>
+      <div class="service-num">05</div>
+      <h3 class="service-title">Landing Page &amp; Satış Hunisi</h3>
+      <p class="service-desc">Dönüşüm odaklı landing page'den çok aşamalı satış hunisine A/B test hazır yapı.</p>
+      <div class="service-tags"><span class="tag">Dönüşüm</span><span class="tag">A/B Test</span></div>
+    </div>
+
+    <!-- YAZILIM -->
+    <div class="service-card">
+      <div class="service-cat-label">💻 Yazılım</div>
+      <div class="service-num">06</div>
+      <h3 class="service-title">Özel Sistem Tasarımı</h3>
+      <p class="service-desc">İş akışınıza tamamen uyumlu, modüler ve ölçeklenebilir sıfırdan yazılım geliştirme.</p>
+      <div class="service-tags"><span class="tag">Özel</span><span class="tag">Ölçeklenebilir</span></div>
+    </div>
+    <div class="service-card">
+      <div class="service-cat-label">💻 Yazılım</div>
+      <div class="service-num">07</div>
+      <h3 class="service-title">Admin Panel</h3>
+      <p class="service-desc">Basit CRUD'dan çok kullanıcılı, rol tabanlı gelişmiş yönetim sistemlerine kadar.</p>
+      <div class="service-tags"><span class="tag">CRUD</span><span class="tag">Rol Tabanlı</span></div>
+    </div>
+    <div class="service-card">
+      <div class="service-cat-label">💻 Yazılım</div>
+      <div class="service-num">08</div>
+      <h3 class="service-title">Hasta &amp; Randevu Sistemi</h3>
+      <p class="service-desc">Klinikler için hasta kaydı, randevu planlama ve sıra yönetimi çözümleri.</p>
+      <div class="service-tags"><span class="tag">Sağlık</span><span class="tag">Randevu</span></div>
+    </div>
+    <div class="service-card">
+      <div class="service-cat-label">💻 Yazılım</div>
+      <div class="service-num">09</div>
+      <h3 class="service-title">Stok &amp; Envanter</h3>
+      <p class="service-desc">Barkod/QR ile ürün takibi, kritik stok uyarıları ve Excel export raporları.</p>
+      <div class="service-tags"><span class="tag">Barkod</span><span class="tag">QR</span></div>
+    </div>
+    <div class="service-card">
+      <div class="service-cat-label">💻 Yazılım</div>
+      <div class="service-num">10</div>
+      <h3 class="service-title">Otomasyon Sistemleri</h3>
+      <p class="service-desc">Tekrarlayan işlemleri otomatikleştirin; email, SMS bildirimleri ve cron işlemleri.</p>
+      <div class="service-tags"><span class="tag">Otomasyon</span><span class="tag">Bildirim</span></div>
+    </div>
+
+    <!-- HIDDEN CARDS — görünmez başlar -->
+
+    <!-- MOBİL -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">📱 Mobil</div>
+      <div class="service-num">11</div>
+      <h3 class="service-title">iOS Uygulaması</h3>
+      <p class="service-desc">Swift ile native iOS; App Store yayınlama, push notifications ve tam cihaz özellikleri.</p>
+      <div class="service-tags"><span class="tag">Swift</span><span class="tag">App Store</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📱 Mobil</div>
+      <div class="service-num">12</div>
+      <h3 class="service-title">Android Uygulaması</h3>
+      <p class="service-desc">Kotlin ile native Android; Google Play desteği ve offline çalışma özelliği.</p>
+      <div class="service-tags"><span class="tag">Kotlin</span><span class="tag">Google Play</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📱 Mobil</div>
+      <div class="service-num">13</div>
+      <h3 class="service-title">React Native</h3>
+      <p class="service-desc">Tek kod tabanıyla iOS ve Android; MVP projeler için hızlı cross-platform geliştirme.</p>
+      <div class="service-tags"><span class="tag">React Native</span><span class="tag">Cross-Platform</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📱 Mobil</div>
+      <div class="service-num">14</div>
+      <h3 class="service-title">Flutter Uygulaması</h3>
+      <p class="service-desc">Yüksek performanslı, güzel animasyonlarla premium mobil deneyim için Flutter.</p>
+      <div class="service-tags"><span class="tag">Flutter</span><span class="tag">Dart</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📱 Mobil</div>
+      <div class="service-num">15</div>
+      <h3 class="service-title">iOS + Android Dual</h3>
+      <p class="service-desc">Her iki platform aynı anda; tutarlı kullanıcı deneyimi ile kurumsal mobil uygulama.</p>
+      <div class="service-tags"><span class="tag">Kurumsal</span><span class="tag">Dual Platform</span></div>
+    </div>
+
+    <!-- GRAFİK TASARIM -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🎨 Grafik Tasarım</div>
+      <div class="service-num">16</div>
+      <h3 class="service-title">Logo Tasarımı</h3>
+      <p class="service-desc">Modern, minimal ve özgün logo; vektör formatında renkli + siyah-beyaz versiyonlar.</p>
+      <div class="service-tags"><span class="tag">Vektör</span><span class="tag">Rebranding</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🎨 Grafik Tasarım</div>
+      <div class="service-num">17</div>
+      <h3 class="service-title">Kurumsal Kimlik</h3>
+      <p class="service-desc">Logo, renk paleti, tipografi ve marka kılavuzundan oluşan tam kurumsal kimlik paketi.</p>
+      <div class="service-tags"><span class="tag">Brand Kit</span><span class="tag">Guidelines</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🎨 Grafik Tasarım</div>
+      <div class="service-num">18</div>
+      <h3 class="service-title">Kartvizit &amp; CV</h3>
+      <p class="service-desc">Baskıya hazır kartvizit (CMYK, 300 DPI) ve ATS uyumlu profesyonel CV tasarımı.</p>
+      <div class="service-tags"><span class="tag">Baskı Hazır</span><span class="tag">CV</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🎨 Grafik Tasarım</div>
+      <div class="service-num">19</div>
+      <h3 class="service-title">Sosyal Medya Tasarımı</h3>
+      <p class="service-desc">Instagram post/story, reklam görselleri ve aylık içerik takvimi paketleri.</p>
+      <div class="service-tags"><span class="tag">Instagram</span><span class="tag">Ads</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🎨 Grafik Tasarım</div>
+      <div class="service-num">20</div>
+      <h3 class="service-title">Afiş &amp; Baskı Tasarımı</h3>
+      <p class="service-desc">Dijital reklam bannerlarından basılı afişe, broşürden billboarda tüm baskı materyalleri.</p>
+      <div class="service-tags"><span class="tag">Dijital</span><span class="tag">Baskı</span></div>
+    </div>
+
+    <!-- VİDEO -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">📹 Video</div>
+      <div class="service-num">21</div>
+      <h3 class="service-title">Video Editleme</h3>
+      <p class="service-desc">Haber, etkinlik ve röportaj videoları için renk düzeltmesi ve başlık ekleme.</p>
+      <div class="service-tags"><span class="tag">Sosyal Medya</span><span class="tag">Kurumsal</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📹 Video</div>
+      <div class="service-num">22</div>
+      <h3 class="service-title">Animasyon &amp; Motion</h3>
+      <p class="service-desc">Logo animasyonu, infografik animasyonları ve 2D/3D motion graphics efektleri.</p>
+      <div class="service-tags"><span class="tag">Motion</span><span class="tag">2D/3D</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📹 Video</div>
+      <div class="service-num">23</div>
+      <h3 class="service-title">Shorts &amp; Reels</h3>
+      <p class="service-desc">TikTok, Instagram Reels ve YouTube Shorts için trending müzikli viral içerik.</p>
+      <div class="service-tags"><span class="tag">TikTok</span><span class="tag">Reels</span></div>
+    </div>
+
+    <!-- UI/UX -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">📐 UI/UX</div>
+      <div class="service-num">24</div>
+      <h3 class="service-title">Wireframe &amp; Prototip</h3>
+      <p class="service-desc">Düşük/yüksek çözünürlüklü wireframe'den etkileşimli prototipe tasarım onay süreci.</p>
+      <div class="service-tags"><span class="tag">Figma</span><span class="tag">Prototip</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📐 UI/UX</div>
+      <div class="service-num">25</div>
+      <h3 class="service-title">Design System</h3>
+      <p class="service-desc">Büyük projeler için bileşen kütüphanesi, tasarım kuralları ve stil rehberi.</p>
+      <div class="service-tags"><span class="tag">Design System</span><span class="tag">Stil Rehberi</span></div>
+    </div>
+
+    <!-- SEO -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🔍 SEO & Pazarlama</div>
+      <div class="service-num">26</div>
+      <h3 class="service-title">Site İçi SEO</h3>
+      <p class="service-desc">Meta başlık/açıklamalar, başlık etiketleri (H1-H3), iç linkler ve URL optimizasyonu.</p>
+      <div class="service-tags"><span class="tag">On-Page</span><span class="tag">Meta</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🔍 SEO & Pazarlama</div>
+      <div class="service-num">27</div>
+      <h3 class="service-title">Teknik SEO</h3>
+      <p class="service-desc">Site hızı, mobile uyumluluk, Schema Markup, sitemap ve Core Web Vitals optimizasyonu.</p>
+      <div class="service-tags"><span class="tag">Core Web Vitals</span><span class="tag">Schema</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🔍 SEO & Pazarlama</div>
+      <div class="service-num">28</div>
+      <h3 class="service-title">Google Ads Yönetimi</h3>
+      <p class="service-desc">Anahtar kelime kampanyaları, bütçe yönetimi ve dönüşüm takibi ile hızlı sonuçlar.</p>
+      <div class="service-tags"><span class="tag">Google Ads</span><span class="tag">PPC</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🔍 SEO & Pazarlama</div>
+      <div class="service-num">29</div>
+      <h3 class="service-title">Google Analytics &amp; GTM</h3>
+      <p class="service-desc">GA4, Search Console ve Google Tag Manager kurulumu ile dönüşüm takibi.</p>
+      <div class="service-tags"><span class="tag">GA4</span><span class="tag">GTM</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🔍 SEO & Pazarlama</div>
+      <div class="service-num">30</div>
+      <h3 class="service-title">Facebook &amp; Instagram Ads</h3>
+      <p class="service-desc">Hedef kitle segmentasyonu, kreatif tasarım, A/B testing ve ROAS optimizasyonu.</p>
+      <div class="service-tags"><span class="tag">Facebook Ads</span><span class="tag">ROAS</span></div>
+    </div>
+
+    <!-- İÇERİK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">✍️ İçerik</div>
+      <div class="service-num">31</div>
+      <h3 class="service-title">SEO Blog Yazarlığı</h3>
+      <p class="service-desc">2000+ kelimelik makaleler; anahtar kelime optimizasyonu ve iç link stratejisi.</p>
+      <div class="service-tags"><span class="tag">Blog</span><span class="tag">SEO</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">✍️ İçerik</div>
+      <div class="service-num">32</div>
+      <h3 class="service-title">Reklam Kopyası</h3>
+      <p class="service-desc">Google Ads, Facebook/Instagram reklam metinleri ve landing page kopyası.</p>
+      <div class="service-tags"><span class="tag">Copywriting</span><span class="tag">Ads</span></div>
+    </div>
+
+    <!-- AI & CHATBOT -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🤖 Chatbot & AI</div>
+      <div class="service-num">33</div>
+      <h3 class="service-title">Web Site Chatbot'u</h3>
+      <p class="service-desc">7/24 müşteri destek otomasyonu ve insan ajanına geçiş sistemi.</p>
+      <div class="service-tags"><span class="tag">Chatbot</span><span class="tag">7/24</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🤖 Chatbot & AI</div>
+      <div class="service-num">34</div>
+      <h3 class="service-title">WhatsApp Business Bot</h3>
+      <p class="service-desc">Otomatik yanıtlama, sipariş durumu sorgulama ve randevu booking.</p>
+      <div class="service-tags"><span class="tag">WhatsApp</span><span class="tag">Otomasyon</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🤖 Chatbot & AI</div>
+      <div class="service-num">35</div>
+      <h3 class="service-title">AI Öneri Motoru</h3>
+      <p class="service-desc">Makine öğrenmesi tabanlı ürün önerileri ve kişiselleştirilmiş deneyim.</p>
+      <div class="service-tags"><span class="tag">ML</span><span class="tag">Öneri</span></div>
+    </div>
+
+    <!-- SOSYAL MEDYA -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">📣 Sosyal Medya</div>
+      <div class="service-num">36</div>
+      <h3 class="service-title">Sosyal Medya Yönetimi</h3>
+      <p class="service-desc">Platform stratejisi, içerik takvimi, yayınlama ve community management.</p>
+      <div class="service-tags"><span class="tag">Strateji</span><span class="tag">İçerik</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📣 Sosyal Medya</div>
+      <div class="service-num">37</div>
+      <h3 class="service-title">Sosyal Medya Analytics</h3>
+      <p class="service-desc">Aylık performans raporları, içerik analizi ve rakip analizi ile stratejik kararlar.</p>
+      <div class="service-tags"><span class="tag">Raporlama</span><span class="tag">Analiz</span></div>
+    </div>
+
+    <!-- E-POSTA -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">📧 E-Posta</div>
+      <div class="service-num">38</div>
+      <h3 class="service-title">Email Kampanyası</h3>
+      <p class="service-desc">Responsive email şablonları, liste yönetimi ve kampanya analitikleri.</p>
+      <div class="service-tags"><span class="tag">Responsive</span><span class="tag">Analitik</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📧 E-Posta</div>
+      <div class="service-num">39</div>
+      <h3 class="service-title">Email Otomasyonu</h3>
+      <p class="service-desc">Hoşgeldiniz serileri, sepet terk hatırlatması ve segmentasyon ile kişiselleştirme.</p>
+      <div class="service-tags"><span class="tag">Otomasyon</span><span class="tag">Segmentasyon</span></div>
+    </div>
+
+    <!-- BRANDING -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🎯 Branding</div>
+      <div class="service-num">40</div>
+      <h3 class="service-title">Marka Stratejisi</h3>
+      <p class="service-desc">Marka kimliği tanımı, rakip analizi ve hedef kitle segmentasyonu ile konumlandırma.</p>
+      <div class="service-tags"><span class="tag">Strateji</span><span class="tag">Konumlandırma</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🎯 Branding</div>
+      <div class="service-num">41</div>
+      <h3 class="service-title">Rebranding Danışmanlığı</h3>
+      <p class="service-desc">Eski markadan yeni markaya geçiş; iletişim planı ve köklü şirket modernizasyonu.</p>
+      <div class="service-tags"><span class="tag">Rebranding</span><span class="tag">Danışmanlık</span></div>
+    </div>
+
+    <!-- HOSTING -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">☁️ Hosting</div>
+      <div class="service-num">42</div>
+      <h3 class="service-title">Hosting &amp; Domain</h3>
+      <p class="service-desc">Shared/VPS/cloud hosting kurulumu, domain yönetimi ve markalı e-posta adresleri.</p>
+      <div class="service-tags"><span class="tag">VPS</span><span class="tag">Cloud</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">☁️ Hosting</div>
+      <div class="service-num">43</div>
+      <h3 class="service-title">SSL &amp; CDN</h3>
+      <p class="service-desc">SSL sertifikası kurulumu, CDN dağıtımı ve global hız optimizasyonu.</p>
+      <div class="service-tags"><span class="tag">SSL</span><span class="tag">CDN</span></div>
+    </div>
+
+    <!-- BAKIM -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🔧 Bakım & Destek</div>
+      <div class="service-num">44</div>
+      <h3 class="service-title">7/24 Teknik Destek</h3>
+      <p class="service-desc">Acil sorunlara hızlı yanıt, düzenli güncelleme ve otomatik günlük yedeklemeler.</p>
+      <div class="service-tags"><span class="tag">7/24</span><span class="tag">Bakım</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🔧 Bakım & Destek</div>
+      <div class="service-num">45</div>
+      <h3 class="service-title">Güvenlik &amp; İzleme</h3>
+      <p class="service-desc">Kötü amaçlı yazılım taraması, firewall yönetimi ve 7/24 sunucu monitörü.</p>
+      <div class="service-tags"><span class="tag">Güvenlik</span><span class="tag">Monitoring</span></div>
+    </div>
+
+    <!-- RESTORAN & YİYECEK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🍽️ Restoran & Yiyecek</div>
+      <div class="service-num">46</div>
+      <h3 class="service-title">Dijital Menü Tasarımı</h3>
+      <p class="service-desc">QR kodla erişilen, telefon uyumlu dijital menü. Fiyat ve ürün güncellemesi saniyeler içinde.</p>
+      <div class="service-tags"><span class="tag">QR Menü</span><span class="tag">Mobil</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🍽️ Restoran & Yiyecek</div>
+      <div class="service-num">47</div>
+      <h3 class="service-title">Online Sipariş Sistemi</h3>
+      <p class="service-desc">Restoran, kafe veya dark kitchen için masa/paket/gel-al siparişi alabilen web uygulaması.</p>
+      <div class="service-tags"><span class="tag">Sipariş</span><span class="tag">Ödeme</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🍽️ Restoran & Yiyecek</div>
+      <div class="service-num">48</div>
+      <h3 class="service-title">Masa Rezervasyon Sistemi</h3>
+      <p class="service-desc">Online masa rezervasyonu, kapasite yönetimi ve otomatik SMS/email hatırlatmaları.</p>
+      <div class="service-tags"><span class="tag">Rezervasyon</span><span class="tag">SMS</span></div>
+    </div>
+
+    <!-- MENÜ & NAVİGASYON TASARIMI -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🧭 Navigasyon Tasarımı</div>
+      <div class="service-num">49</div>
+      <h3 class="service-title">Mega Menü Tasarımı</h3>
+      <p class="service-desc">Çok kategorili büyük sitelere özel animasyonlu, görsel destekli mega dropdown menü.</p>
+      <div class="service-tags"><span class="tag">Mega Menü</span><span class="tag">UX</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🧭 Navigasyon Tasarımı</div>
+      <div class="service-num">50</div>
+      <h3 class="service-title">Mobil Hamburger Menü</h3>
+      <p class="service-desc">Akıllı telefon uyumlu, pürüzsüz animasyonlu hamburger menü ve drawer navigasyon tasarımı.</p>
+      <div class="service-tags"><span class="tag">Mobil</span><span class="tag">Animasyon</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🧭 Navigasyon Tasarımı</div>
+      <div class="service-num">51</div>
+      <h3 class="service-title">Sticky Header &amp; Navbar</h3>
+      <p class="service-desc">Kaydırmayla değişen, şeffaflaşan veya küçülen akıllı navigasyon çubukları.</p>
+      <div class="service-tags"><span class="tag">Sticky</span><span class="tag">Scroll</span></div>
+    </div>
+
+    <!-- FORM & ETKİLEŞİM -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">📋 Form & Etkileşim</div>
+      <div class="service-num">52</div>
+      <h3 class="service-title">Özel Form Tasarımı</h3>
+      <p class="service-desc">İletişim, başvuru, anket ve sipariş formları; validasyon, adım adım wizard yapısı dahil.</p>
+      <div class="service-tags"><span class="tag">Form</span><span class="tag">Validasyon</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📋 Form & Etkileşim</div>
+      <div class="service-num">53</div>
+      <h3 class="service-title">Popup &amp; Modal Tasarımı</h3>
+      <p class="service-desc">E-posta toplama, kampanya duyurusu veya onay dialogu için dönüşüm odaklı popup tasarımı.</p>
+      <div class="service-tags"><span class="tag">Popup</span><span class="tag">Modal</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📋 Form & Etkileşim</div>
+      <div class="service-num">54</div>
+      <h3 class="service-title">Filtreleme &amp; Arama UI</h3>
+      <p class="service-desc">Ürün, içerik veya portföy listelerinde anlık filtreleme, sıralama ve arama arayüzü.</p>
+      <div class="service-tags"><span class="tag">Filtre</span><span class="tag">Arama</span></div>
+    </div>
+
+    <!-- ANİMASYON & MİKROETKİLEŞİM -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">✨ Animasyon</div>
+      <div class="service-num">55</div>
+      <h3 class="service-title">Scroll Animasyonları</h3>
+      <p class="service-desc">Sayfayı kaydırırken elementlerin yukarıdan, soldan, sağdan belirdiği etkileyici geçiş efektleri.</p>
+      <div class="service-tags"><span class="tag">GSAP</span><span class="tag">ScrollTrigger</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">✨ Animasyon</div>
+      <div class="service-num">56</div>
+      <h3 class="service-title">Hover &amp; Mikro-Etkileşim</h3>
+      <p class="service-desc">Buton, kart ve ikonlarda kullanıcıyı memnun eden küçük ama etkileyici hover animasyonları.</p>
+      <div class="service-tags"><span class="tag">CSS</span><span class="tag">Framer Motion</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">✨ Animasyon</div>
+      <div class="service-num">57</div>
+      <h3 class="service-title">Sayfa Geçiş Animasyonları</h3>
+      <p class="service-desc">Sayfalar arası pürüzsüz geçiş efektleri; fade, slide, wipe ve özel transition tasarımı.</p>
+      <div class="service-tags"><span class="tag">Page Transition</span><span class="tag">SPA</span></div>
+    </div>
+
+    <!-- BASKILI MATERYAL -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🖨️ Baskılı Materyal</div>
+      <div class="service-num">58</div>
+      <h3 class="service-title">Menü Baskı Tasarımı</h3>
+      <p class="service-desc">Kafe, restoran ve bar için A4/A3 baskıya hazır, şık ve okunabilir fiziksel menü tasarımı.</p>
+      <div class="service-tags"><span class="tag">Baskı</span><span class="tag">CMYK</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🖨️ Baskılı Materyal</div>
+      <div class="service-num">59</div>
+      <h3 class="service-title">Ambalaj &amp; Etiket Tasarımı</h3>
+      <p class="service-desc">Ürün kutusu, şişe etiketi, poşet ve ambalaj grafikleri; baskıya hazır vektör dosyalar.</p>
+      <div class="service-tags"><span class="tag">Ambalaj</span><span class="tag">Etiket</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🖨️ Baskılı Materyal</div>
+      <div class="service-num">60</div>
+      <h3 class="service-title">Tabela &amp; Tabelacı Görseli</h3>
+      <p class="service-desc">Mağaza, ofis veya fuar için iç/dış mekan tabela görselleri ve roll-up banner tasarımı.</p>
+      <div class="service-tags"><span class="tag">Tabela</span><span class="tag">Roll-Up</span></div>
+    </div>
+
+    <!-- ÖZEL ÇÖZÜMLER -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🧩 Özel Çözümler</div>
+      <div class="service-num">46</div>
+      <h3 class="service-title">Site Yeniden Tasarım</h3>
+      <p class="service-desc">Eski siteyi modernleştirme; tasarım güncellemesi ve marka yenileme.</p>
+      <div class="service-tags"><span class="tag">Revize</span><span class="tag">Modernizasyon</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🧩 Özel Çözümler</div>
+      <div class="service-num">47</div>
+      <h3 class="service-title">API &amp; Entegrasyon</h3>
+      <p class="service-desc">Firebase, Cloudinary, iyzico, Stripe ve harici API bağlantıları ile ekosistem genişletme.</p>
+      <div class="service-tags"><span class="tag">Firebase</span><span class="tag">Stripe</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🧩 Özel Çözümler</div>
+      <div class="service-num">48</div>
+      <h3 class="service-title">Veri Taşıma &amp; Hızlandırma</h3>
+      <p class="service-desc">Sistem migration, 301 yönlendirmeleri ve site hızını %50+ artıran optimizasyonlar.</p>
+      <div class="service-tags"><span class="tag">Migration</span><span class="tag">Performans</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🧩 Özel Çözümler</div>
+      <div class="service-num">49</div>
+      <h3 class="service-title">Fotoğraf Retouching</h3>
+      <p class="service-desc">Renk grading, cilt düzeltmesi, arka plan değişimi ve ürün katalog görseli optimizasyonu.</p>
+      <div class="service-tags"><span class="tag">Retouching</span><span class="tag">Color Grading</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🧩 Özel Çözümler</div>
+      <div class="service-num">50</div>
+      <h3 class="service-title">Çoklu Satıcı Pazarı</h3>
+      <p class="service-desc">Birden fazla satıcının ürün satabileceği tam marketplace platformu; komisyon yönetimi dahil.</p>
+      <div class="service-tags"><span class="tag">Marketplace</span><span class="tag">Abonelik</span></div>
+    </div>
+
+    <!-- WEB ARAYÜZ DETAYLARI -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🧭 Arayüz Detayları</div>
+      <div class="service-num">61</div>
+      <h3 class="service-title">Dropdown Menü Tasarımı</h3>
+      <p class="service-desc">Hover veya tıklamayla açılan, animasyonlu, erişilebilir dropdown ve mega menü tasarımı.</p>
+      <div class="service-tags"><span class="tag">Dropdown</span><span class="tag">Animasyon</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🧭 Arayüz Detayları</div>
+      <div class="service-num">62</div>
+      <h3 class="service-title">Breadcrumb &amp; Sayfalama</h3>
+      <p class="service-desc">Kullanıcının nerede olduğunu gösteren breadcrumb ve sayfa sayısı yönetimi (pagination) bileşeni.</p>
+      <div class="service-tags"><span class="tag">Navigasyon</span><span class="tag">UX</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🧭 Arayüz Detayları</div>
+      <div class="service-num">63</div>
+      <h3 class="service-title">Sidebar &amp; Drawer Tasarımı</h3>
+      <p class="service-desc">Masaüstü sidebar paneli veya mobilden kayan drawer; hem navigasyon hem filtre için ideal.</p>
+      <div class="service-tags"><span class="tag">Sidebar</span><span class="tag">Drawer</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🧭 Arayüz Detayları</div>
+      <div class="service-num">64</div>
+      <h3 class="service-title">Tab &amp; Accordion Bileşeni</h3>
+      <p class="service-desc">İçeriği düzenli sunan tab navigasyon ve SSS / içerik için accordion bileşen tasarımı.</p>
+      <div class="service-tags"><span class="tag">Tab</span><span class="tag">Accordion</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🧭 Arayüz Detayları</div>
+      <div class="service-num">65</div>
+      <h3 class="service-title">Toast &amp; Bildirim Tasarımı</h3>
+      <p class="service-desc">Başarı, hata, uyarı durumlarını bildiren küçük toast mesajları ve snackbar bileşen tasarımı.</p>
+      <div class="service-tags"><span class="tag">Toast</span><span class="tag">Feedback</span></div>
+    </div>
+
+    <!-- KART & LİSTE BİLEŞENLERİ -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🃏 Kart Bileşenleri</div>
+      <div class="service-num">66</div>
+      <h3 class="service-title">Ürün Kartı Tasarımı</h3>
+      <p class="service-desc">E-ticaret için fiyat, görsel, puan ve sepete ekle butonunu barındıran etkileyici ürün kartı.</p>
+      <div class="service-tags"><span class="tag">Ürün</span><span class="tag">E-Ticaret</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🃏 Kart Bileşenleri</div>
+      <div class="service-num">67</div>
+      <h3 class="service-title">Blog &amp; Makale Kartı</h3>
+      <p class="service-desc">Görsel, başlık, özet ve kategori etiketiyle okuma süresini gösteren modern blog kartı tasarımı.</p>
+      <div class="service-tags"><span class="tag">Blog</span><span class="tag">İçerik</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🃏 Kart Bileşenleri</div>
+      <div class="service-num">68</div>
+      <h3 class="service-title">Fiyatlandırma Tablosu</h3>
+      <p class="service-desc">Özellik karşılaştırmalı, öne çıkan plan vurgulu, dönüşüm optimize fiyat kartları tasarımı.</p>
+      <div class="service-tags"><span class="tag">Pricing</span><span class="tag">SaaS</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🃏 Kart Bileşenleri</div>
+      <div class="service-num">69</div>
+      <h3 class="service-title">Ekip &amp; Profil Kartı</h3>
+      <p class="service-desc">Fotoğraf, unvan, sosyal medya linkleri içeren hover efektli ekip üyesi ve profil kartı tasarımı.</p>
+      <div class="service-tags"><span class="tag">Ekip</span><span class="tag">Profil</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🃏 Kart Bileşenleri</div>
+      <div class="service-num">70</div>
+      <h3 class="service-title">İstatistik &amp; Sayaç Kartı</h3>
+      <p class="service-desc">Rakamları animasyonlu sayan counter bileşeni; başarı, müşteri veya proje sayılarını öne çıkarır.</p>
+      <div class="service-tags"><span class="tag">Counter</span><span class="tag">Animasyon</span></div>
+    </div>
+
+    <!-- HERO & SECTION TASARIMLARI -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🖼️ Hero & Bölüm Tasarımı</div>
+      <div class="service-num">71</div>
+      <h3 class="service-title">Hero Section Tasarımı</h3>
+      <p class="service-desc">Ziyaretçiyi ilk saniyede yakalayan, güçlü tipografi ve CTA butonlu ana sayfa hero tasarımı.</p>
+      <div class="service-tags"><span class="tag">Hero</span><span class="tag">CTA</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🖼️ Hero & Bölüm Tasarımı</div>
+      <div class="service-num">72</div>
+      <h3 class="service-title">Galeri &amp; Lightbox</h3>
+      <p class="service-desc">Masonry veya grid düzeninde fotoğraf galerisi; tıklanınca büyüyen lightbox geçiş efektiyle.</p>
+      <div class="service-tags"><span class="tag">Galeri</span><span class="tag">Lightbox</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🖼️ Hero & Bölüm Tasarımı</div>
+      <div class="service-num">73</div>
+      <h3 class="service-title">Slider &amp; Carousel</h3>
+      <p class="service-desc">Görseller, referanslar veya ürünler için dokunmatik destekli, otomatik geçişli carousel bileşeni.</p>
+      <div class="service-tags"><span class="tag">Slider</span><span class="tag">Carousel</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🖼️ Hero & Bölüm Tasarımı</div>
+      <div class="service-num">74</div>
+      <h3 class="service-title">Before &amp; After Slider</h3>
+      <p class="service-desc">Retouching, renovasyon veya ürün karşılaştırması için sürüklenebilir öncesi/sonrası bileşeni.</p>
+      <div class="service-tags"><span class="tag">Before/After</span><span class="tag">Karşılaştırma</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🖼️ Hero & Bölüm Tasarımı</div>
+      <div class="service-num">75</div>
+      <h3 class="service-title">Parallax Arka Plan</h3>
+      <p class="service-desc">Kaydırmayla hareket eden derinlik hissi veren parallax bölümler; görsel etki gücü yüksek.</p>
+      <div class="service-tags"><span class="tag">Parallax</span><span class="tag">Scroll</span></div>
+    </div>
+
+    <!-- YAZILIM EK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">💻 Yazılım</div>
+      <div class="service-num">76</div>
+      <h3 class="service-title">Üyelik &amp; Giriş Sistemi</h3>
+      <p class="service-desc">Kayıt, giriş, şifre sıfırlama ve sosyal medya ile oturum açma sistemi; JWT tabanlı güvenli yapı.</p>
+      <div class="service-tags"><span class="tag">Auth</span><span class="tag">JWT</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">💻 Yazılım</div>
+      <div class="service-num">77</div>
+      <h3 class="service-title">Çevrimiçi Eğitim Platformu</h3>
+      <p class="service-desc">Video ders, quiz, sertifika ve ilerleme takibi olan tam kapsamlı LMS (öğrenim yönetim sistemi).</p>
+      <div class="service-tags"><span class="tag">LMS</span><span class="tag">Video</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">💻 Yazılım</div>
+      <div class="service-num">78</div>
+      <h3 class="service-title">Canlı Sohbet Sistemi</h3>
+      <p class="service-desc">WebSocket tabanlı gerçek zamanlı mesajlaşma; özel veya grup sohbet odaları, dosya paylaşımı.</p>
+      <div class="service-tags"><span class="tag">WebSocket</span><span class="tag">Realtime</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">💻 Yazılım</div>
+      <div class="service-num">79</div>
+      <h3 class="service-title">Fatura &amp; Muhasebe Modülü</h3>
+      <p class="service-desc">Otomatik fatura oluşturma, PDF export, ödeme takibi ve basit gelir-gider raporlama sistemi.</p>
+      <div class="service-tags"><span class="tag">Fatura</span><span class="tag">PDF</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">💻 Yazılım</div>
+      <div class="service-num">80</div>
+      <h3 class="service-title">İnsan Kaynakları Paneli</h3>
+      <p class="service-desc">Personel yönetimi, izin/devamsızlık takibi, performans değerlendirme ve bordro modülleri.</p>
+      <div class="service-tags"><span class="tag">HR</span><span class="tag">Personel</span></div>
+    </div>
+
+    <!-- WEB TASARIM EK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🌐 Web Tasarım</div>
+      <div class="service-num">81</div>
+      <h3 class="service-title">Tek Sayfa Uygulama (SPA)</h3>
+      <p class="service-desc">Sayfa yenilemesi olmadan çalışan akıcı React/Vue SPA; hızlı geçişler ve dinamik içerik yükleme.</p>
+      <div class="service-tags"><span class="tag">React</span><span class="tag">SPA</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🌐 Web Tasarım</div>
+      <div class="service-num">82</div>
+      <h3 class="service-title">PWA (Progresif Web Uygulaması)</h3>
+      <p class="service-desc">Telefona yüklenebilen, offline çalışan, push bildirim gönderebilen web uygulaması.</p>
+      <div class="service-tags"><span class="tag">PWA</span><span class="tag">Offline</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🌐 Web Tasarım</div>
+      <div class="service-num">83</div>
+      <h3 class="service-title">Etkinlik &amp; Konferans Sitesi</h3>
+      <p class="service-desc">Geri sayım, konuşmacı listesi, program takvimi ve online bilet satışı olan etkinlik web sitesi.</p>
+      <div class="service-tags"><span class="tag">Etkinlik</span><span class="tag">Bilet</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🌐 Web Tasarım</div>
+      <div class="service-num">84</div>
+      <h3 class="service-title">Emlak &amp; Kiralık Site</h3>
+      <p class="service-desc">İlan listeleme, harita entegrasyonu, fiyat filtresi ve sanal tur desteği olan emlak platformu.</p>
+      <div class="service-tags"><span class="tag">Emlak</span><span class="tag">Harita</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🌐 Web Tasarım</div>
+      <div class="service-num">85</div>
+      <h3 class="service-title">Otel &amp; Konaklama Sitesi</h3>
+      <p class="service-desc">Oda galerisi, fiyat takvimi, online rezervasyon ve misafir yorumları olan konaklama web sitesi.</p>
+      <div class="service-tags"><span class="tag">Rezervasyon</span><span class="tag">Otel</span></div>
+    </div>
+
+    <!-- GRAFİK TASARIM EK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🎨 Grafik Tasarım</div>
+      <div class="service-num">86</div>
+      <h3 class="service-title">İnfografik Tasarımı</h3>
+      <p class="service-desc">Verileri görsel hikayeye dönüştüren, paylaşılabilir infografik ve veri görselleştirme tasarımı.</p>
+      <div class="service-tags"><span class="tag">İnfografik</span><span class="tag">Data Viz</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🎨 Grafik Tasarım</div>
+      <div class="service-num">87</div>
+      <h3 class="service-title">Sunum &amp; Pitch Deck Tasarımı</h3>
+      <p class="service-desc">Yatırımcı, müşteri veya konferans sunumları için profesyonel ve etkileyici slayt tasarımı.</p>
+      <div class="service-tags"><span class="tag">Pitch Deck</span><span class="tag">PowerPoint</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🎨 Grafik Tasarım</div>
+      <div class="service-num">88</div>
+      <h3 class="service-title">E-Kitap &amp; PDF Tasarımı</h3>
+      <p class="service-desc">Lead magnet, rehber veya katalog olarak kullanılacak profesyonel e-kitap ve dijital PDF tasarımı.</p>
+      <div class="service-tags"><span class="tag">E-Kitap</span><span class="tag">Lead Magnet</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🎨 Grafik Tasarım</div>
+      <div class="service-num">89</div>
+      <h3 class="service-title">İkon &amp; İllüstrasyon Seti</h3>
+      <p class="service-desc">Web veya uygulama için tutarlı stil ve renk paletinde özgün ikon ve illüstrasyon seti tasarımı.</p>
+      <div class="service-tags"><span class="tag">İkon</span><span class="tag">İllüstrasyon</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🎨 Grafik Tasarım</div>
+      <div class="service-num">90</div>
+      <h3 class="service-title">Davetiye &amp; Sertifika Tasarımı</h3>
+      <p class="service-desc">Etkinlik davetiyesi, kurs sertifikası ve ödül belgesi için özel baskıya hazır tasarımlar.</p>
+      <div class="service-tags"><span class="tag">Davetiye</span><span class="tag">Sertifika</span></div>
+    </div>
+
+    <!-- SEO & PAZARLAMA EK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🔍 SEO & Pazarlama</div>
+      <div class="service-num">91</div>
+      <h3 class="service-title">Yerel SEO Optimizasyonu</h3>
+      <p class="service-desc">Google My Business yönetimi, yerel anahtar kelimeler ve şehir bazlı arama görünürlüğü artırma.</p>
+      <div class="service-tags"><span class="tag">Yerel SEO</span><span class="tag">GMB</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🔍 SEO & Pazarlama</div>
+      <div class="service-num">92</div>
+      <h3 class="service-title">Rakip Analizi Raporu</h3>
+      <p class="service-desc">Rakiplerin SEO stratejisi, backlink profili, anahtar kelime boşlukları ve içerik analizinin raporu.</p>
+      <div class="service-tags"><span class="tag">Analiz</span><span class="tag">Rapor</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🔍 SEO & Pazarlama</div>
+      <div class="service-num">93</div>
+      <h3 class="service-title">LinkedIn Reklam Yönetimi</h3>
+      <p class="service-desc">B2B hedefli LinkedIn kampanyaları; şirket büyüklüğü, sektör ve unvan bazlı hedefleme.</p>
+      <div class="service-tags"><span class="tag">LinkedIn Ads</span><span class="tag">B2B</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🔍 SEO & Pazarlama</div>
+      <div class="service-num">94</div>
+      <h3 class="service-title">TikTok &amp; YouTube Reklam</h3>
+      <p class="service-desc">Video odaklı platformlarda görüntüleme, tıklama ve dönüşüm hedefli reklam kampanyası yönetimi.</p>
+      <div class="service-tags"><span class="tag">TikTok Ads</span><span class="tag">YouTube Ads</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🔍 SEO & Pazarlama</div>
+      <div class="service-num">95</div>
+      <h3 class="service-title">Affiliate &amp; Referans Sistemi</h3>
+      <p class="service-desc">Kullanıcıların sizi başkalarına tavsiye etmesini sağlayan komisyonlu affiliate pazarlama altyapısı.</p>
+      <div class="service-tags"><span class="tag">Affiliate</span><span class="tag">Referans</span></div>
+    </div>
+
+    <!-- MOBİL EK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">📱 Mobil</div>
+      <div class="service-num">96</div>
+      <h3 class="service-title">Uygulama Mağaza Optimizasyonu</h3>
+      <p class="service-desc">App Store ve Google Play'de daha fazla indirme için ASO; başlık, açıklama ve anahtar kelime optimizasyonu.</p>
+      <div class="service-tags"><span class="tag">ASO</span><span class="tag">App Store</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📱 Mobil</div>
+      <div class="service-num">97</div>
+      <h3 class="service-title">Mobil Ödeme Entegrasyonu</h3>
+      <p class="service-desc">Apple Pay, Google Pay, Stripe ve iyzico ile mobil uygulama içi güvenli ödeme sistemi kurulumu.</p>
+      <div class="service-tags"><span class="tag">Apple Pay</span><span class="tag">Stripe</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📱 Mobil</div>
+      <div class="service-num">98</div>
+      <h3 class="service-title">Konum &amp; Harita Entegrasyonu</h3>
+      <p class="service-desc">Google Maps veya Mapbox ile yakınımdaki tesisleri gösteren, rota hesaplayan konum modülü.</p>
+      <div class="service-tags"><span class="tag">Maps</span><span class="tag">GPS</span></div>
+    </div>
+
+    <!-- UI/UX EK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">📐 UI/UX</div>
+      <div class="service-num">99</div>
+      <h3 class="service-title">Kullanıcı Testi &amp; Analizi</h3>
+      <p class="service-desc">Gerçek kullanıcılarla yapılan A/B ve kullanılabilirlik testleri; tıklama haritası ve ısı haritası analizi.</p>
+      <div class="service-tags"><span class="tag">Usability</span><span class="tag">Heatmap</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📐 UI/UX</div>
+      <div class="service-num">100</div>
+      <h3 class="service-title">Onboarding Akışı Tasarımı</h3>
+      <p class="service-desc">Yeni kullanıcıyı uygulamaya alıştıran, terk oranını düşüren adım adım onboarding ekranları.</p>
+      <div class="service-tags"><span class="tag">Onboarding</span><span class="tag">Retention</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📐 UI/UX</div>
+      <div class="service-num">101</div>
+      <h3 class="service-title">Boş Durum &amp; Hata Sayfası</h3>
+      <p class="service-desc">404, 500 hata sayfaları ve içerik olmadığında gösterilen marka uyumlu boş durum tasarımları.</p>
+      <div class="service-tags"><span class="tag">404</span><span class="tag">Error State</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📐 UI/UX</div>
+      <div class="service-num">102</div>
+      <h3 class="service-title">Dark / Light Mod Tasarımı</h3>
+      <p class="service-desc">Sistem tercihine veya kullanıcı seçimine göre sorunsuz geçiş yapan karanlık ve aydınlık tema.</p>
+      <div class="service-tags"><span class="tag">Dark Mode</span><span class="tag">Tema</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📐 UI/UX</div>
+      <div class="service-num">103</div>
+      <h3 class="service-title">Skeleton &amp; Loading Ekranı</h3>
+      <p class="service-desc">İçerik yüklenirken kullanıcıyı sıkmayan, profesyonel görünümlü iskelet ve yükleme animasyonları.</p>
+      <div class="service-tags"><span class="tag">Skeleton</span><span class="tag">Loading</span></div>
+    </div>
+
+    <!-- CHATBOT & AI EK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🤖 Chatbot & AI</div>
+      <div class="service-num">104</div>
+      <h3 class="service-title">Sesli Asistan Entegrasyonu</h3>
+      <p class="service-desc">Web veya mobil uygulamaya entegre edilebilir sesle komut alan yapay zeka asistan modülü.</p>
+      <div class="service-tags"><span class="tag">Voice AI</span><span class="tag">Speech</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🤖 Chatbot & AI</div>
+      <div class="service-num">105</div>
+      <h3 class="service-title">AI İçerik Üreteci</h3>
+      <p class="service-desc">GPT tabanlı ürün açıklaması, blog yazısı veya sosyal medya gönderisi otomatik oluşturma aracı.</p>
+      <div class="service-tags"><span class="tag">GPT</span><span class="tag">İçerik AI</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🤖 Chatbot & AI</div>
+      <div class="service-num">106</div>
+      <h3 class="service-title">Görsel Tanıma Sistemi</h3>
+      <p class="service-desc">Yüklenen fotoğraftan ürün, nesne veya yüz tanıyan; otomatik etiketleme yapan AI modülü.</p>
+      <div class="service-tags"><span class="tag">Vision AI</span><span class="tag">Tanıma</span></div>
+    </div>
+
+    <!-- ANİMASYON EK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">✨ Animasyon</div>
+      <div class="service-num">107</div>
+      <h3 class="service-title">Lottie Animasyon Entegrasyonu</h3>
+      <p class="service-desc">Hafif, vektörel Lottie dosyaları ile web ve mobil uygulamaya yüksek kaliteli animasyon ekleme.</p>
+      <div class="service-tags"><span class="tag">Lottie</span><span class="tag">JSON</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">✨ Animasyon</div>
+      <div class="service-num">108</div>
+      <h3 class="service-title">Cursor &amp; Mouse Efektleri</h3>
+      <p class="service-desc">Özel imleç tasarımı, magnetik buton efektleri ve mouse pozisyonuna tepki veren interaktif arayüz.</p>
+      <div class="service-tags"><span class="tag">Cursor</span><span class="tag">Magnetic</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">✨ Animasyon</div>
+      <div class="service-num">109</div>
+      <h3 class="service-title">Yazı Animasyonları</h3>
+      <p class="service-desc">Yazı yazılıyor efekti, split-text reveal, karakter karakter beliren başlık animasyonları tasarımı.</p>
+      <div class="service-tags"><span class="tag">Typewriter</span><span class="tag">Split Text</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">✨ Animasyon</div>
+      <div class="service-num">110</div>
+      <h3 class="service-title">Parçacık &amp; Arka Plan Efekti</h3>
+      <p class="service-desc">Canvas veya WebGL tabanlı parçacık sistemi, dalga efekti, degrade mesh arka plan animasyonları.</p>
+      <div class="service-tags"><span class="tag">Canvas</span><span class="tag">Particles</span></div>
+    </div>
+
+    <!-- RESTORAN EK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🍽️ Restoran & Yiyecek</div>
+      <div class="service-num">111</div>
+      <h3 class="service-title">Menü Kategorilendirme Sistemi</h3>
+      <p class="service-desc">Başlangıç, ana yemek, tatlı, içecek gibi kategorili; allerjen ve kalori bilgisi gösterebilen menü sistemi.</p>
+      <div class="service-tags"><span class="tag">Menü</span><span class="tag">Allerjen</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🍽️ Restoran & Yiyecek</div>
+      <div class="service-num">112</div>
+      <h3 class="service-title">Sadakat &amp; Puan Sistemi</h3>
+      <p class="service-desc">Müşterilerin her siparişte puan kazandığı, biriktirilen puanla indirim veya hediye ürün aldığı sistem.</p>
+      <div class="service-tags"><span class="tag">Sadakat</span><span class="tag">Puan</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🍽️ Restoran & Yiyecek</div>
+      <div class="service-num">113</div>
+      <h3 class="service-title">Mutfak Ekranı (KDS)</h3>
+      <p class="service-desc">Gelen siparişleri mutfaktaki ekranda gösteren, hazır işaretleme ve süre takibi yapan Kitchen Display.</p>
+      <div class="service-tags"><span class="tag">KDS</span><span class="tag">Mutfak</span></div>
+    </div>
+
+    <!-- KART BİLEŞENLERİ EK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🃏 Kart Bileşenleri</div>
+      <div class="service-num">114</div>
+      <h3 class="service-title">Referans &amp; Yorum Kartı</h3>
+      <p class="service-desc">Müşteri yorumları, yıldız puanı ve avatar görseli içeren hover animasyonlu testimonial kartı.</p>
+      <div class="service-tags"><span class="tag">Testimonial</span><span class="tag">Review</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🃏 Kart Bileşenleri</div>
+      <div class="service-num">115</div>
+      <h3 class="service-title">Hizmet &amp; Özellik Kartı</h3>
+      <p class="service-desc">İkon, başlık ve kısa açıklama içeren, hover'da renklenip yükselen hizmet tanıtım kartları.</p>
+      <div class="service-tags"><span class="tag">Feature Card</span><span class="tag">Hover</span></div>
+    </div>
+
+    <!-- FORM & ETKİLEŞİM EK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">📋 Form & Etkileşim</div>
+      <div class="service-num">116</div>
+      <h3 class="service-title">Çok Adımlı Wizard Form</h3>
+      <p class="service-desc">Uzun formları adımlara bölen, ilerleme çubuğu gösteren ve geri dönülebilen çok aşamalı form tasarımı.</p>
+      <div class="service-tags"><span class="tag">Wizard</span><span class="tag">Multi-Step</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📋 Form & Etkileşim</div>
+      <div class="service-num">117</div>
+      <h3 class="service-title">Anket &amp; Oylama Sistemi</h3>
+      <p class="service-desc">Çoktan seçmeli, açık uçlu veya puanlı anketler oluşturma ve sonuçları gerçek zamanlı gösterme.</p>
+      <div class="service-tags"><span class="tag">Anket</span><span class="tag">Oylama</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📋 Form & Etkileşim</div>
+      <div class="service-num">118</div>
+      <h3 class="service-title">Geri Sayım &amp; Timer</h3>
+      <p class="service-desc">Kampanya, etkinlik veya ürün lansmanı için aciliyet hissi yaratan animasyonlu geri sayım bileşeni.</p>
+      <div class="service-tags"><span class="tag">Countdown</span><span class="tag">Timer</span></div>
+    </div>
+
+    <!-- BASKILI MATERYAL EK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🖨️ Baskılı Materyal</div>
+      <div class="service-num">119</div>
+      <h3 class="service-title">Katalog &amp; Broşür Tasarımı</h3>
+      <p class="service-desc">Ürün veya hizmet katalogları; çok sayfalı A4/A5 broşür, iki katlı / üç katlı el ilanı tasarımı.</p>
+      <div class="service-tags"><span class="tag">Katalog</span><span class="tag">Broşür</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🖨️ Baskılı Materyal</div>
+      <div class="service-num">120</div>
+      <h3 class="service-title">Ürün Etiketi &amp; Barkod</h3>
+      <p class="service-desc">Ürün üzerindeki barkod, QR kod ve bilgi etiketi tasarımı; termal yazıcı uyumlu format desteği.</p>
+      <div class="service-tags"><span class="tag">Etiket</span><span class="tag">Barkod</span></div>
+    </div>
+
+    <!-- SOSYAL MEDYA EK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">📣 Sosyal Medya</div>
+      <div class="service-num">121</div>
+      <h3 class="service-title">Influencer Kampanya Yönetimi</h3>
+      <p class="service-desc">Markanıza uygun influencer seçimi, brief hazırlama, içerik onayı ve kampanya performans takibi.</p>
+      <div class="service-tags"><span class="tag">Influencer</span><span class="tag">UGC</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📣 Sosyal Medya</div>
+      <div class="service-num">122</div>
+      <h3 class="service-title">Viral İçerik Stratejisi</h3>
+      <p class="service-desc">Trend analizi, challenge fikri geliştirme ve maksimum etkileşim için viral içerik planlama danışmanlığı.</p>
+      <div class="service-tags"><span class="tag">Viral</span><span class="tag">Trend</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📣 Sosyal Medya</div>
+      <div class="service-num">123</div>
+      <h3 class="service-title">LinkedIn Profil Optimizasyonu</h3>
+      <p class="service-desc">Kişisel veya şirket LinkedIn profili için başlık, özet ve içerik stratejisi optimizasyonu.</p>
+      <div class="service-tags"><span class="tag">LinkedIn</span><span class="tag">Personal Brand</span></div>
+    </div>
+
+    <!-- HOSTING EK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">☁️ Hosting</div>
+      <div class="service-num">124</div>
+      <h3 class="service-title">Sunucu Göç Hizmeti</h3>
+      <p class="service-desc">Mevcut siteyi sıfır kesinti ile yeni sunucuya taşıma; veritabanı, dosya ve konfigürasyon aktarımı.</p>
+      <div class="service-tags"><span class="tag">Migration</span><span class="tag">Zero Downtime</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">☁️ Hosting</div>
+      <div class="service-num">125</div>
+      <h3 class="service-title">Load Balancing &amp; Ölçeklendirme</h3>
+      <p class="service-desc">Yüksek trafikli siteler için yük dengeleme, otomatik ölçeklendirme ve felaket kurtarma planı.</p>
+      <div class="service-tags"><span class="tag">Load Balancer</span><span class="tag">Scale</span></div>
+    </div>
+
+    <!-- E-POSTA EK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">📧 E-Posta</div>
+      <div class="service-num">126</div>
+      <h3 class="service-title">Transactional Email Kurulumu</h3>
+      <p class="service-desc">Sipariş onayı, fatura, şifre sıfırlama gibi sistem emaillerinin tasarımı ve SMTP altyapı kurulumu.</p>
+      <div class="service-tags"><span class="tag">SMTP</span><span class="tag">Transactional</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📧 E-Posta</div>
+      <div class="service-num">127</div>
+      <h3 class="service-title">Newsletter Abonelik Sistemi</h3>
+      <p class="service-desc">Double opt-in, abonelikten çıkma yönetimi ve GDPR uyumlu newsletter abonelik sistemi kurulumu.</p>
+      <div class="service-tags"><span class="tag">Newsletter</span><span class="tag">GDPR</span></div>
+    </div>
+
+    <!-- BRANDING EK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🎯 Branding</div>
+      <div class="service-num">128</div>
+      <h3 class="service-title">Ses &amp; Ton Kılavuzu</h3>
+      <p class="service-desc">Markanın yazılı iletişim dili; resmi mi, samimi mi, esprili mi? Tüm kanallar için ses ve ton dokümantasyonu.</p>
+      <div class="service-tags"><span class="tag">Tone of Voice</span><span class="tag">Yazı Stili</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🎯 Branding</div>
+      <div class="service-num">129</div>
+      <h3 class="service-title">Marka Fotoğraf Yönlendirmesi</h3>
+      <p class="service-desc">Hangi tarz, renk ve kompozisyon? Marka uyumlu fotoğraf çekimi için art direction rehberi.</p>
+      <div class="service-tags"><span class="tag">Art Direction</span><span class="tag">Fotoğraf</span></div>
+    </div>
+
+    <!-- ÖZEL ÇÖZÜMLER EK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🧩 Özel Çözümler</div>
+      <div class="service-num">130</div>
+      <h3 class="service-title">Sözleşme &amp; İmza Sistemi</h3>
+      <p class="service-desc">Online sözleşme oluşturma, dijital imza toplama ve imzalanmış belgeyi PDF olarak saklama sistemi.</p>
+      <div class="service-tags"><span class="tag">E-İmza</span><span class="tag">Sözleşme</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🧩 Özel Çözümler</div>
+      <div class="service-num">131</div>
+      <h3 class="service-title">QR Kod Oluşturucu</h3>
+      <p class="service-desc">URL, vCard, Wi-Fi, menü veya ödeme için özelleştirilebilir ve izlenebilir QR kod üretim aracı.</p>
+      <div class="service-tags"><span class="tag">QR Kod</span><span class="tag">Dinamik</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🧩 Özel Çözümler</div>
+      <div class="service-num">132</div>
+      <h3 class="service-title">URL Kısaltıcı &amp; Yönlendirici</h3>
+      <p class="service-desc">Markalı kısa URL oluşturma, tıklama takibi ve coğrafi yönlendirme özellikli link yönetim sistemi.</p>
+      <div class="service-tags"><span class="tag">Short URL</span><span class="tag">Redirect</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🧩 Özel Çözümler</div>
+      <div class="service-num">133</div>
+      <h3 class="service-title">İçerik Yönetim Sistemi (CMS)</h3>
+      <p class="service-desc">Kod bilmeden sayfa, blog ve medya yönetebileceğiniz özel veya headless CMS kurulumu ve özelleştirme.</p>
+      <div class="service-tags"><span class="tag">CMS</span><span class="tag">Headless</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🧩 Özel Çözümler</div>
+      <div class="service-num">134</div>
+      <h3 class="service-title">Çevrimiçi Ödeme Sayfası</h3>
+      <p class="service-desc">Link paylaşılabilir, markalı ödeme sayfası; taksit seçeneği, fatura bilgisi ve ödeme onay emaili dahil.</p>
+      <div class="service-tags"><span class="tag">Ödeme Linki</span><span class="tag">iyzico</span></div>
+    </div>
+
+    <!-- WEB TASARIM EK 2 -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🌐 Web Tasarım</div>
+      <div class="service-num">135</div>
+      <h3 class="service-title">Veteriner &amp; Klinik Sitesi</h3>
+      <p class="service-desc">Online randevu, hizmet listesi, ekip tanıtımı ve hasta yorumlarına sahip veteriner / klinik web sitesi.</p>
+      <div class="service-tags"><span class="tag">Klinik</span><span class="tag">Randevu</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🌐 Web Tasarım</div>
+      <div class="service-num">136</div>
+      <h3 class="service-title">Hukuk Bürosu Sitesi</h3>
+      <p class="service-desc">Uzmanlık alanları, avukat profilleri, başarı hikâyeleri ve gizli iletişim formu olan avukatlık bürosu sitesi.</p>
+      <div class="service-tags"><span class="tag">Hukuk</span><span class="tag">Profil</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🌐 Web Tasarım</div>
+      <div class="service-num">137</div>
+      <h3 class="service-title">Spor Kulübü &amp; Fitness Sitesi</h3>
+      <p class="service-desc">Ders programı, üyelik paketi, online kayıt ve antrenör profilleri olan spor merkezi web sitesi.</p>
+      <div class="service-tags"><span class="tag">Fitness</span><span class="tag">Üyelik</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🌐 Web Tasarım</div>
+      <div class="service-num">138</div>
+      <h3 class="service-title">Düğün &amp; Organizasyon Sitesi</h3>
+      <p class="service-desc">Galeri, paket seçenekleri, müsaitlik takvimi ve iletişim formu olan düğün organizasyonu web sitesi.</p>
+      <div class="service-tags"><span class="tag">Düğün</span><span class="tag">Organizasyon</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🌐 Web Tasarım</div>
+      <div class="service-num">139</div>
+      <h3 class="service-title">Müzik &amp; Sanatçı Sitesi</h3>
+      <p class="service-desc">Diskografi, konser takvimi, müzik oynatıcısı ve merchandise satışı olan sanatçı tanıtım sitesi.</p>
+      <div class="service-tags"><span class="tag">Müzik</span><span class="tag">Sanatçı</span></div>
+    </div>
+
+    <!-- ANALİTİK & RAPORLAMA -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">📊 Analitik & Raporlama</div>
+      <div class="service-num">140</div>
+      <h3 class="service-title">Özel Analitik Dashboard</h3>
+      <p class="service-desc">Birden fazla kaynaktan (GA4, ads, CRM) veri çeken; satış, trafik ve dönüşümü tek ekranda gösteren panel.</p>
+      <div class="service-tags"><span class="tag">Dashboard</span><span class="tag">Multi-Source</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📊 Analitik & Raporlama</div>
+      <div class="service-num">141</div>
+      <h3 class="service-title">Otomatik Haftalık Rapor</h3>
+      <p class="service-desc">Her pazartesi email ile gelen, önceki haftanın satış, trafik ve kampanya özetini içeren otomatik rapor.</p>
+      <div class="service-tags"><span class="tag">Otomatik</span><span class="tag">Email Rapor</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">📊 Analitik & Raporlama</div>
+      <div class="service-num">142</div>
+      <h3 class="service-title">Müşteri Yaşam Boyu Değeri</h3>
+      <p class="service-desc">CLV hesaplama, churn oranı takibi ve müşteri segmentine göre kârlılık analizi raporlama sistemi.</p>
+      <div class="service-tags"><span class="tag">CLV</span><span class="tag">Churn</span></div>
+    </div>
+
+    <!-- ERİŞİLEBİLİRLİK & GÜVENLİK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🔐 Güvenlik</div>
+      <div class="service-num">143</div>
+      <h3 class="service-title">KVKK &amp; GDPR Uyumluluk</h3>
+      <p class="service-desc">Çerez politikası, gizlilik bildirimi, onay yönetimi ve veri silme talebi modülü kurulumu.</p>
+      <div class="service-tags"><span class="tag">KVKK</span><span class="tag">GDPR</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🔐 Güvenlik</div>
+      <div class="service-num">144</div>
+      <h3 class="service-title">İki Faktörlü Kimlik Doğrulama</h3>
+      <p class="service-desc">SMS, email veya authenticator uygulamasıyla iki adımlı giriş güvenliği (2FA) entegrasyonu.</p>
+      <div class="service-tags"><span class="tag">2FA</span><span class="tag">Güvenlik</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🔐 Güvenlik</div>
+      <div class="service-num">145</div>
+      <h3 class="service-title">Penetrasyon Testi</h3>
+      <p class="service-desc">Web uygulamanızdaki güvenlik açıklarını tespit eden temel sızma testi ve güvenlik açığı raporu.</p>
+      <div class="service-tags"><span class="tag">Pentest</span><span class="tag">Zafiyet</span></div>
+    </div>
+
+    <!-- EĞİTİM & DANIŞMANLIK -->
+    <div class="service-card hidden">
+      <div class="service-cat-label">🎓 Eğitim & Danışmanlık</div>
+      <div class="service-num">146</div>
+      <h3 class="service-title">Teknik Danışmanlık</h3>
+      <p class="service-desc">Projeniz için en doğru teknoloji yığınını seçme; mimari tasarım, veritabanı seçimi ve yol haritası.</p>
+      <div class="service-tags"><span class="tag">Danışmanlık</span><span class="tag">Mimari</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🎓 Eğitim & Danışmanlık</div>
+      <div class="service-num">147</div>
+      <h3 class="service-title">Ekip Eğitimi &amp; Workshop</h3>
+      <p class="service-desc">Şirket içi ekibinize web, SEO, sosyal medya veya grafik tasarım konularında özel workshop ve eğitim.</p>
+      <div class="service-tags"><span class="tag">Workshop</span><span class="tag">Eğitim</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🎓 Eğitim & Danışmanlık</div>
+      <div class="service-num">148</div>
+      <h3 class="service-title">Freelance Kaynak Danışmanlığı</h3>
+      <p class="service-desc">Projeniz için doğru freelancer veya ajans seçimi; brief hazırlama ve teklif değerlendirme desteği.</p>
+      <div class="service-tags"><span class="tag">Freelance</span><span class="tag">Brief</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🎓 Eğitim & Danışmanlık</div>
+      <div class="service-num">149</div>
+      <h3 class="service-title">Dijital Dönüşüm Danışmanlığı</h3>
+      <p class="service-desc">İşletmenizin süreçlerini dijitale taşıma; araç seçimi, entegrasyon planı ve değişim yönetimi desteği.</p>
+      <div class="service-tags"><span class="tag">Dijital Dönüşüm</span><span class="tag">Strateji</span></div>
+    </div>
+    <div class="service-card hidden">
+      <div class="service-cat-label">🎓 Eğitim & Danışmanlık</div>
+      <div class="service-num">150</div>
+      <h3 class="service-title">Yatırımcı Sunumu Hazırlama</h3>
+      <p class="service-desc">Startup veya büyüme aşamasındaki şirketler için pitch deck, finansal model ve sunum koçluğu hizmeti.</p>
+      <div class="service-tags"><span class="tag">Pitch</span><span class="tag">Startup</span></div>
+    </div>
+
+  </div><!-- /.services-grid -->
+
+  <div class="services-more-wrap">
+    <button class="btn-show-more reveal" id="showMoreBtn">
+      Daha Fazlasını Gör <span class="arrow">↓</span>
+    </button>
+  </div>
+
+</section>
+
+
+
+<!-- WORKS -->
+<section id="works">
+  <div class="works-header reveal">
+    <div>
+      <div class="section-label">Seçili Çalışmalar</div>
+      <h2 class="works-title">Son <em>Projeler</em></h2>
+    </div>
+    <a href="admin.html" class="btn-ghost" target="_blank">Admin Panel →</a>
+  </div>
+  <div class="projects-grid" id="projectsGrid">
+    <div class="projects-loading">
+      <span style="color:var(--gold);margin-right:.5rem">◆</span> Projeler yükleniyor...
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="process-inner">
+    <div class="process-left">
+      <div class="section-label reveal">Nasıl Çalışıyoruz</div>
+      <h2 class="process-title reveal">Net Bir <em>Süreç,</em><br>Güvenilir Sonuç</h2>
+      <p class="process-desc reveal">Her proje titiz bir planlama ile başlar. Sürpriz yoktur, gecikme yoktur. Sadece net iletişim ve üstün kalite.</p>
+    </div>
+    <div class="process-steps">
+      <div class="step reveal">
+        <div class="step-row">
+          <span class="step-num">01</span>
+          <div>
+            <div class="step-title">Keşif & Brifing</div>
+            <div class="step-desc">Projenizi, hedef kitlenizi ve başarı kriterlerinizi derinlemesine anlıyoruz.</div>
+          </div>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-row">
+          <span class="step-num">02</span>
+          <div>
+            <div class="step-title">Tasarım & Prototip</div>
+            <div class="step-desc">Wireframe'den yüksek çözünürlüklü prototipe kadar her detayı onayınıza sunuyoruz.</div>
+          </div>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-row">
+          <span class="step-num">03</span>
+          <div>
+            <div class="step-title">Geliştirme</div>
+            <div class="step-desc">Temiz, sürdürülebilir kod. Hız testleri ve çapraz tarayıcı uyumluluğu garantili.</div>
+          </div>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-row">
+          <span class="step-num">04</span>
+          <div>
+            <div class="step-title">Test & Yayın</div>
+            <div class="step-desc">Kapsamlı QA testleri sonrası sorunsuz yayın. Sonrasında da yanınızdayız.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-label reveal">Müşteri Görüşleri</div>
+  <div class="testimonials-grid">
+    <div class="testi-card reveal">
+      <p class="testi-quote">Beklentilerimizin çok ötesinde bir tasarım çıkardılar. Site yayına girdiğinden beri dönüşüm oranımız %40 arttı.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">A</div>
+        <div>
+          <div class="testi-name">Ahmet Yılmaz</div>
+          <div class="testi-role">CEO, Teknoloji Girişimi</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <p class="testi-quote">Süreç boyunca çok şeffaftılar. Her adımda bilgilendirildik, hiç sürprizle karşılaşmadık. Kesinlikle tavsiye ediyorum.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">S</div>
+        <div>
+          <div class="testi-name">Selin Öztürk</div>
+          <div class="testi-role">Kurucu, E-Ticaret Markası</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <p class="testi-quote">Karmaşık bir dashboard projesini zamanında ve bütçe dahilinde teslim ettiler. Teknik yetkinlikleri gerçekten etkileyici.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">M</div>
+        <div>
+          <div class="testi-name">Murat Demir</div>
+          <div class="testi-role">CTO, SaaS Şirketi</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label reveal" style="justify-content:center">İletişim</div>
+  <h2 class="contact-title reveal">Projenizi<br><em>Birlikte</em> Hayata<br>Geçirelim</h2>
+  <p class="contact-sub reveal">Fikrinizi duymak istiyoruz. Ücretsiz bir keşif görüşmesi için hemen ulaşın.</p>
+  <a href="/cdn-cgi/l/email-protection#5c31392e343d3e3d1c2f2829383533723f3331" class="contact-email reveal"><span class="__cf_email__" data-cfemail="d8b5bdaab0b9bab998abacadbcb1b7f6bbb7b5">[email&#160;protected]</span></a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">Web, Kodlama &amp; Tasarım<span>.</span></a>
+  <span class="footer-copy">© 2025 Studio. Tüm hakları saklıdır.</span>
+  <div class="footer-socials">
+    <a href="#">Behance</a>
+    <a href="#">Dribbble</a>
+    <a href="#">LinkedIn</a>
+    <a href="#">GitHub</a>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button, .project-card, .service-card, .testi-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => observer.observe(el));
+
+  // ── FIREBASE — PROJECTS ──────────────────────────────────
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getFirestore, collection, query, orderBy, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyADnZXHLLSr1kyBCbTJb9cTCX_JLmWcsF8",
+    authDomain: "msenerai4.firebaseapp.com",
+    projectId: "msenerai4",
+    storageBucket: "msenerai4.firebasestorage.app",
+    messagingSenderId: "726374600839",
+    appId: "1:726374600839:web:c33d86d9b0420583496822",
+    measurementId: "G-FK9RX1KMCE"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  const GRADIENTS = ['pg-1','pg-2','pg-3','pg-4','pg-5'];
+
+  async function loadProjects() {
+    const grid = document.getElementById('projectsGrid');
+    try {
+      const q    = query(collection(db, 'projects'), orderBy('order', 'asc'));
+      const snap = await getDocs(q);
+
+      if (snap.empty) {
+        grid.innerHTML = `
+          <div class="projects-empty">
+            Henüz proje eklenmedi.
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = '';
+      snap.forEach((doc, i) => {
+        const p  = doc.data();
+        const pg = GRADIENTS[i % GRADIENTS.length];
+
+        const imgHtml = p.imageUrl
+          ? `<img class="project-thumb" src="${p.imageUrl}" alt="${p.name}" loading="lazy">`
+          : `<div class="project-img-placeholder ${pg}"><span>${(p.name||'PRJ').substring(0,3).toUpperCase()}</span></div>`;
+
+        const pageBtn = p.pageUrl
+          ? `<a class="view-btn" href="${p.pageUrl}" target="_blank">Projeyi Gör</a>`
+          : `<span class="view-btn">İncele</span>`;
+
+        const linkBtn = p.liveUrl
+          ? `<a class="project-link-btn" href="${p.liveUrl}" target="_blank">↗ Canlı Site</a>`
+          : '';
+
+        const card = document.createElement('div');
+        card.className = 'project-card reveal';
+        card.innerHTML = `
+          <div class="project-img ${p.imageUrl ? '' : pg}">
+            ${imgHtml}
+            <div class="project-overlay">
+              ${pageBtn}
+              ${linkBtn}
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="project-cat">${p.category || ''}</div>
+            <div class="project-name">${p.name || 'Proje'}</div>
+            ${p.description ? `<div class="project-desc">${p.description}</div>` : ''}
+          </div>`;
+        grid.appendChild(card);
+
+        // trigger reveal
+        setTimeout(() => {
+          observer.observe(card);
+        }, 50);
+      });
+
+      // cursor hover on new cards
+      grid.querySelectorAll('.project-card').forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+      });
+
+    } catch (err) {
+      console.error('Firestore error:', err);
+      grid.innerHTML = `<div class="projects-empty">Projeler yüklenemedi. Konsolu kontrol edin.</div>`;
+    }
+  }
+
+  loadProjects();
+  const showMoreBtn = document.getElementById('showMoreBtn');
+  const hiddenCards = document.querySelectorAll('.service-card.hidden');
+
+  showMoreBtn.addEventListener('click', () => {
+    const isOpen = showMoreBtn.classList.contains('open');
+
+    if (!isOpen) {
+      hiddenCards.forEach((card, i) => {
+        card.style.display = 'block';
+        // stagger reveal
+        setTimeout(() => {
+          card.classList.add('visible');
+          card.style.opacity = 1;
+          card.style.transform = 'translateY(0)';
+        }, i * 30);
+      });
+      showMoreBtn.classList.add('open');
+      showMoreBtn.innerHTML = 'Daha Az Göster <span class="arrow">↑</span>';
+    } else {
+      hiddenCards.forEach(card => {
+        card.style.display = 'none';
+        card.style.opacity = '';
+        card.style.transform = '';
+      });
+      showMoreBtn.classList.remove('open');
+      showMoreBtn.innerHTML = 'Daha Fazla Göster <span class="arrow">↓</span>';
+    }
+  });
+</script>
+</body>
+</html>

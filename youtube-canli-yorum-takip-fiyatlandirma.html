@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="YouTube Canlı Yorum Takip Sistemi fiyatlandırması. Ücretsiz deneme ve premium paketler.">
+    <title>Fiyatlandırma | YouTube Canlı Yorum Takip Sistemi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a08;
+            --bg2: #111110;
+            --cream: #ffffff;
+            --gold: #c9a84c;
+            --text-muted: #9a9a94;
+            --border: #2a2a26;
+        }
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--cream);
+            -webkit-font-smoothing: antialiased;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10,10,8,0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 40px;
+        }
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        header .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--gold);
+            text-decoration: none;
+        }
+        header .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+        header .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+        header .nav-links a:hover {
+            color: var(--gold);
+        }
+        header .cta-btn {
+            background: var(--cream);
+            color: var(--bg);
+            padding: 8px 20px;
+            border: none;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background 0.3s;
+        }
+        header .cta-btn:hover {
+            background: var(--gold);
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 140px 40px 80px;
+        }
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.8rem;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 60px;
+        }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin-bottom: 60px;
+        }
+        .pricing-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            padding: 40px;
+            position: relative;
+            transition: all 0.3s;
+        }
+        .pricing-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-4px);
+        }
+        .pricing-card.featured {
+            border: 2px solid var(--gold);
+            transform: scale(1.05);
+        }
+        .pricing-card.featured::before {
+            content: 'ÖNERİLEN';
+            position: absolute;
+            top: -14px;
+            left: 20px;
+            background: var(--gold);
+            color: var(--bg);
+            padding: 4px 12px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+        }
+        .pricing-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 400;
+            margin-bottom: 12px;
+        }
+        .pricing-card .price {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.4rem;
+            letter-spacing: 0.04em;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+        .pricing-card .period {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            margin-bottom: 24px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .pricing-card .button {
+            width: 100%;
+            padding: 12px;
+            background: var(--cream);
+            color: var(--bg);
+            border: none;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            transition: background 0.3s;
+        }
+        .pricing-card .button:hover {
+            background: var(--gold);
+        }
+        .pricing-card.featured .button {
+            background: var(--gold);
+            color: var(--bg);
+        }
+        .pricing-card.featured .button:hover {
+            background: var(--cream);
+        }
+        .pricing-features {
+            list-style: none;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.9;
+        }
+        .pricing-features li {
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+        .pricing-features li::before {
+            content: '✓ ';
+            color: var(--gold);
+            margin-right: 8px;
+        }
+        .comparison-table {
+            margin-top: 60px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+        table th {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--gold);
+        }
+        table td {
+            border: 1px solid var(--border);
+            padding: 12px 16px;
+            color: var(--text-muted);
+        }
+        table tr:hover {
+            background: var(--bg2);
+        }
+        .faq {
+            margin-top: 60px;
+        }
+        .faq h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 400;
+            margin-bottom: 32px;
+        }
+        .faq-item {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        .faq-item h3 {
+            color: var(--cream);
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+        .faq-item p {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            line-height: 1.7;
+        }
+        footer {
+            padding: 40px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            margin-top: 80px;
+        }
+        footer p {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
+            margin-bottom: 8px;
+        }
+        @media (max-width: 768px) {
+            header { padding: 12px 20px; }
+            .container { padding: 100px 20px 60px; }
+            h1 { font-size: 2rem; }
+            .pricing-grid { grid-template-columns: 1fr; }
+            .pricing-card.featured { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="youtube-canli-yorum-takip-anasayfa.html" class="logo">▶ LiveTrack</a>
+            <ul class="nav-links">
+                <li><a href="youtube-canli-yorum-takip-anasayfa.html#features">Özellikler</a></li>
+                <li><a href="youtube-canli-yorum-takip-hakkinda.html">Hakkında</a></li>
+                <li><a href="youtube-canli-yorum-takip-nasil-calisir.html">Nasıl Çalışır</a></li>
+            </ul>
+            <a href="youtube-canli-yorum-takip.html" class="cta-btn">Uygulamaya Git</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Fiyatlandırma</h1>
+        <p class="subtitle">İhtiyacınıza uygun planı seçin. Tüm paketlerde tam özellik desteği vardır.</p>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>Ücretsiz Deneme</h3>
+                <div class="price">0 ₺</div>
+                <div class="period">15 Dakika</div>
+                <button class="button" onclick="window.location.href='youtube-canli-yorum-takip.html'">Şimdi Başla</button>
+                <ul class="pricing-features">
+                    <li>Tüm 4 çekiliş yöntemi</li>
+                    <li>Gerçek zamanlı yorum takibi</li>
+                    <li>Kayıt arşivi sistemi</li>
+                    <li>Multi-dil desteği</li>
+                    <li>Teknik destek</li>
+                </ul>
+            </div>
+
+            <div class="pricing-card featured">
+                <h3>Premium (Aylık)</h3>
+                <div class="price">999 ₺</div>
+                <div class="period">Sınırsız Kullanım</div>
+                <button class="button">Satın Al</button>
+                <ul class="pricing-features">
+                    <li>Sınırsız çalışma süresi</li>
+                    <li>Tüm özellikler aktif</li>
+                    <li>Öncelikli destek</li>
+                    <li>API erişimi</li>
+                    <li>Özel raporlama</li>
+                </ul>
+            </div>
+
+            <div class="pricing-card">
+                <h3>Premium (Yıllık)</h3>
+                <div class="price">9999 ₺</div>
+                <div class="period">12 Ay (Daha Ekonomik)</div>
+                <button class="button">Satın Al</button>
+                <ul class="pricing-features">
+                    <li>Sınırsız çalışma süresi</li>
+                    <li>Tüm özellikler aktif</li>
+                    <li>Fırsat: %15 indirim</li>
+                    <li>Öncelikli destek</li>
+                    <li>Özel raporlama</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="comparison-table">
+            <table>
+                <tr>
+                    <th>Özellik</th>
+                    <th>Ücretsiz Deneme</th>
+                    <th>Premium (Aylık)</th>
+                    <th>Premium (Yıllık)</th>
+                </tr>
+                <tr>
+                    <td>Süresi</td>
+                    <td>30 Dakika</td>
+                    <td>Sınırsız</td>
+                    <td>Sınırsız</td>
+                </tr>
+                <tr>
+                    <td>İlk Yazan Takibi</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td>Sıralı Yazar</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td>En Yüksek Sayı</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td>Rastgele Çekiliş</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td>Kayıt Arşivi</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td>Teknik Destek</td>
+                    <td>Temel</td>
+                    <td>Öncelikli</td>
+                    <td>Öncelikli</td>
+                </tr>
+                <tr>
+                    <td>API Erişimi</td>
+                    <td>-</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td>Özel Raporlar</td>
+                    <td>-</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="faq">
+            <h2>Sıkça Sorulan Sorular</h2>
+
+            <div class="faq-item">
+                <h3>Ücretsiz deneme süresi bittikten sonra ne olur?</h3>
+                <p>Deneme süresi bittiğinde sistem çalışmayı durduracak. Veya Premium planı satın alarak sınırsız erişim kazanabilirsiniz. 30 dakika içinde sistemin tüm özelliklerini test edebilirsiniz.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Premium'a yükseltmek mümkün mü?</h3>
+                <p>Evet, istediğiniz zaman deneme süresinden premium'a geçebilirsiniz. Ödeme anında hemen aktif olur.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Abonelik iptal edilebilir mi?</h3>
+                <p>Evet, 0534 782 57 04 numarasına iletişim kurarak aboneliğinizi iptal edebilirsiniz.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Hangi ödeme yöntemleri kabul edilir?</h3>
+                <p>Kredi kartı, banka transferi ve ödeme gateways. Detaylar için destek ekibine iletişim kurun.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>İşletmelerim için özel paket var mı?</h3>
+                <p>Evet. Yüksek hacimli kullanım için özel fiyatlandırma sunuyoruz. 0534 782 57 04'ü arayın.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Verilerim silinir mi?</h3>
+                <p>Verileriniz tarayıcı depolanmasında tutulur. Abonelik biterse veya browserı temizlerseniz silinir.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 YouTube Canlı Yorum Takip Sistemi</p>
+        <p><a href="youtube-canli-yorum-takip-anasayfa.html">Ana Sayfa</a> | <a href="youtube-canli-yorum-takip-iletisim.html">İletişim</a></p>
+    </footer>
+</body>
+</html>

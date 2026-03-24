@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - YouTube Canlı Yorum Takip</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg:       #0a0a08;
+            --bg2:      #111110;
+            --bg3:      #181816;
+            --cream:    #ffffff;
+            --gold:     #c9a84c;
+            --gold-dim: #8a6e2f;
+            --rust:     #b84a2e;
+            --muted:    #ffffff;
+            --border:   #2a2a26;
+
+            /* legacy compat — inline styles use these vars */
+            --red-primary:    var(--gold);
+            --red-dark:       var(--gold-dim);
+            --red-light:      #d4b86a;
+            --red-subtle:     rgba(201,168,76,0.08);
+            --green:          #7a9a72;
+            --green-subtle:   rgba(122,154,114,0.10);
+            --bg-primary:     var(--bg);
+            --bg-secondary:   var(--bg2);
+            --bg-tertiary:    var(--bg3);
+            --border-color:   var(--border);
+            --text-primary:   var(--cream);
+            --text-secondary: var(--muted);
+            --text-muted:     #3a3a34;
+        }
+
+        /* ── Noise overlay ─────────────────────────── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+            opacity: .028;
+            pointer-events: none;
+        }
+
+        /* ── Custom cursor ─────────────────────────── */
+        #cursor {
+            position: fixed; top: 0; left: 0; z-index: 9999;
+            width: 8px; height: 8px;
+            background: var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%,-50%);
+            transition: transform .1s, width .25s, height .25s, background .25s;
+            mix-blend-mode: difference;
+        }
+        #cursor.hover { width: 28px; height: 28px; background: var(--cream); }
+
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--cream);
+            min-height: 100vh;
+            padding: 40px 20px;
+            cursor: none;
+            position: relative;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.8rem;
+            font-weight: 300;
+            color: var(--cream);
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+
+        h1 em { font-style: italic; color: var(--gold); }
+
+        .subtitle {
+            font-size: 0.65rem;
+            color: var(--muted);
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        /* ── Panel Sections ────────────────────────── */
+        .panel-section {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            color: var(--gold);
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 24px;
+            height: 1px;
+            background: var(--gold);
+            flex-shrink: 0;
+        }
+
+        /* ── Forms ─────────────────────────────────── */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.62rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--cream);
+            font-size: 0.82rem;
+            font-family: 'DM Mono', monospace;
+            transition: border-color 0.25s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        select option {
+            background: var(--bg2);
+            color: var(--cream);
+        }
+
+        small {
+            display: block;
+            font-size: 0.62rem;
+            color: var(--muted);
+            margin-top: 6px;
+            letter-spacing: 0.04em;
+        }
+
+        /* ── API Keys ──────────────────────────────── */
+        .api-keys-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .api-key-item {
+            position: relative;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .api-key-number {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 0.04em;
+            color: var(--gold);
+            min-width: 30px;
+        }
+
+        .api-key-input {
+            flex: 1;
+            padding: 7px 10px;
+            font-size: 0.78rem;
+        }
+
+        .btn-remove {
+            padding: 6px 12px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-family: 'DM Mono', monospace;
+            transition: all 0.2s;
+        }
+
+        .btn-remove:hover {
+            border-color: var(--rust);
+            color: var(--rust);
+        }
+
+        .btn-add {
+            width: 100%;
+            padding: 11px;
+            background: transparent;
+            border: 1px dashed var(--border);
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 0.72rem;
+            font-family: 'DM Mono', monospace;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-add:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        /* ── Buttons ───────────────────────────────── */
+        .btn-primary {
+            width: 100%;
+            padding: 13px;
+            background: var(--cream);
+            color: var(--bg);
+            border: none;
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            font-family: 'DM Mono', monospace;
+            cursor: pointer;
+            transition: background 0.25s;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover { background: var(--gold); }
+
+        .btn-primary:disabled {
+            background: var(--bg3);
+            color: var(--muted);
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            padding: 7px 14px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-family: 'DM Mono', monospace;
+            cursor: pointer;
+            width: auto;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .btn-success {
+            background: var(--gold);
+            color: var(--bg);
+            border: none;
+            font-family: 'DM Mono', monospace;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .btn-success:hover { background: #d4b86a; }
+
+        /* ── Status ────────────────────────────────── */
+        .status-message {
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            margin-top: 14px;
+            font-size: 0.78rem;
+            display: none;
+            letter-spacing: 0.04em;
+        }
+
+        .status-success {
+            border-color: var(--gold-dim);
+            color: var(--gold);
+            background: rgba(201,168,76,0.06);
+        }
+
+        .status-error {
+            border-color: var(--rust);
+            color: #d46a4e;
+            background: rgba(184,74,46,0.06);
+        }
+
+        /* ── Stats grid ────────────────────────────── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.6rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.4rem;
+            letter-spacing: 0.04em;
+            color: var(--gold);
+            line-height: 1;
+        }
+
+        /* ── Settings grid ─────────────────────────── */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .settings-grid-item {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 16px;
+        }
+
+        .settings-grid-item label { margin-bottom: 12px; }
+
+        .settings-grid-item input,
+        .settings-grid-item select {
+            margin: 0;
+            width: 100%;
+        }
+
+        /* ── Tabs ──────────────────────────────────── */
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            padding: 12px 22px;
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 0.62rem;
+            font-weight: 500;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            font-family: 'DM Mono', monospace;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--gold);
+            border-bottom-color: var(--gold);
+        }
+
+        .tab-btn:hover:not(.active) { color: var(--cream); }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* ── Checkboxes ────────────────────────────── */
+        .checkbox-group {
+            display: grid;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-item input[type="checkbox"],
+        .checkbox-item input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: var(--gold);
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            font-size: 0.82rem;
+            color: var(--cream);
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        /* ── Table ─────────────────────────────────── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.78rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 10px 12px;
+            color: var(--muted);
+            font-weight: 400;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 11px 12px;
+            border-bottom: 1px solid rgba(42,42,38,0.7);
+        }
+
+        tr:hover { background: rgba(201,168,76,0.03); }
+
+        /* ── Progress bar ──────────────────────────── */
+        .progress-bar {
+            width: 100%;
+            height: 2px;
+            background: var(--bg3);
+            overflow: hidden;
+            margin: 5px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gold);
+            transition: width 0.3s;
+        }
+
+        /* ── Toast ─────────────────────────────────── */
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99999;
+            padding: 13px 20px;
+            font-size: 0.78rem;
+            font-family: 'DM Mono', monospace;
+            letter-spacing: 0.04em;
+            border: 1px solid var(--border);
+            max-width: 360px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.25s, transform 0.25s;
+            pointer-events: none;
+        }
+        #toast.show { opacity: 1; transform: translateY(0); }
+        #toast.success { background: var(--bg2); border-color: var(--gold); color: var(--gold); }
+        #toast.error   { background: var(--bg2); border-color: var(--rust); color: #d46a4e; }
+
+        /* ── Modal ─────────────────────────────────── */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9500;
+            background: rgba(10,10,8,0.85);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal-content {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            padding: 32px;
+            max-width: 480px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 300;
+            color: var(--cream);
+            margin-bottom: 20px;
+            letter-spacing: -0.01em;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button { flex: 1; }
+
+        /* ── Responsive ────────────────────────────── */
+        @media (max-width: 768px) {
+            .api-keys-grid { grid-template-columns: 1fr; }
+            .settings-grid { grid-template-columns: 1fr; }
+            .tabs { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="toast"></div>
+
+    <!-- Admin Giriş Ekranı -->
+    <div id="adminLoginOverlay" style="
+        display:flex; position:fixed; inset:0; z-index:9000;
+        background:var(--bg); align-items:center; justify-content:center;">
+        <div style="
+            background:var(--bg2);
+            border:1px solid var(--border);
+            padding:48px 40px; text-align:center; max-width:380px; width:90%;">
+            <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:24px;">Admin Erişimi</div>
+            <h2 style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--cream);margin-bottom:10px;">Panel</h2>
+            <p style="font-size:0.72rem;color:var(--muted);margin-bottom:32px;line-height:1.7;letter-spacing:0.03em;">Yönetim paneline erişmek için<br>Google hesabınızla giriş yapın.</p>
+            <button id="adminGoogleSignIn" style="
+                width:100%; padding:13px 20px; background:var(--cream); color:var(--bg);
+                border:none; font-size:0.68rem; font-weight:500; letter-spacing:0.14em;
+                text-transform:uppercase;
+                font-family:'DM Mono',monospace; cursor:pointer;
+                display:flex; align-items:center; justify-content:center; gap:12px;
+                transition:background 0.25s;">
+                <svg width="16" height="16" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Google ile Giriş Yap
+            </button>
+        </div>
+    </div>
+
+    <div id="mainContent" style="display:none;">
+    <div class="container">
+
+        <header style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; text-align:left; padding-bottom:24px; margin-bottom:32px; border-bottom:1px solid var(--border);">
+            <div>
+                <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Yönetim Paneli</div>
+                <h1 style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;margin-bottom:0;">Admin <em style="font-style:italic;color:var(--gold);">Panel</em></h1>
+                <p class="subtitle" style="margin-top:4px;">YouTube Canlı Yorum Takip Sistemi</p>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <img id="adminUserPhoto" src="" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid var(--border);">
+                <span id="adminUserName" style="font-size:0.72rem;color:var(--muted);"></span>
+                <button id="adminSignOut" class="btn-secondary">Çıkış</button>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="settings">Ayarlar</button>
+            <button class="tab-btn" data-tab="users">Kullanıcılar</button>
+        </div>
+
+        <!-- ──────────────────────────────────────────────────── -->
+        <!-- SETTINGS TAB -->
+        <!-- ──────────────────────────────────────────────────── -->
+        <div id="settings-tab" class="tab-content active">
+
+            <!-- API Keys Section -->
+            <div class="panel-section">
+                <div class="section-title">
+                    <span>API Anahtarları Yönetimi</span>
+                </div>
+
+                <div id="apiKeysGrid" class="api-keys-grid"></div>
+                <button class="btn-add" id="addKeyBtn">+ Yeni API Anahtarı Ekle</button>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Toplam Anahtar</div>
+                        <div class="stat-value" id="totalKeys">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Kayıtlı</div>
+                        <div class="stat-value" id="savedKeys">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Settings -->
+            <div class="panel-section">
+                <div class="section-title">
+                    <span>Sistem Ayarları</span>
+                </div>
+
+                <div class="form-group">
+                    <label>Yenileme Aralığı (saniye)</label>
+                    <input type="number" id="refreshInterval" min="2" max="60" value="5">
+                </div>
+            </div>
+
+            <!-- Kullanıcı Süre Yönetimi -->
+            <div class="panel-section">
+                <div class="section-title">
+                    <span>Kullanıcı Süre Yönetimi</span>
+                </div>
+                <p style="font-size:0.72rem;color:var(--muted);margin-bottom:22px;line-height:1.7;letter-spacing:0.03em;">
+                    Yeni kullanıcılara verilecek deneme süresi ve yetkili kullanıcılara verilecek günlük kota süresi ayarlarını yapın.
+                </p>
+
+                <div class="settings-grid">
+                    <div class="settings-grid-item">
+                        <label>Deneme Süresi (dakika)</label>
+                        <input type="number" id="trialDurationMinutes" min="1" max="1440" value="15">
+                        <small>Yeni kullanıcılara tanınacak ücretsiz deneme süresi</small>
+                    </div>
+
+                    <div class="settings-grid-item">
+                        <label>Günlük Kota Süresi</label>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                            <div>
+                                <label style="font-size:0.6rem;color:var(--muted);display:block;margin-bottom:6px;letter-spacing:0.1em;">Saat</label>
+                                <input type="number" id="quotaHours" min="0" max="23" value="8" style="margin:0;">
+                            </div>
+                            <div>
+                                <label style="font-size:0.6rem;color:var(--muted);display:block;margin-bottom:6px;letter-spacing:0.1em;">Dakika</label>
+                                <input type="number" id="quotaMinutes" min="0" max="59" value="0" style="margin:0;">
+                            </div>
+                        </div>
+                        <small>Yetkili kullanıcılara her gün tanınacak kota süresi</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Save Button -->
+            <button class="btn-primary" id="saveBtn">Tüm Ayarları Kaydet</button>
+            <div class="status-message" id="statusMessage"></div>
+
+        </div>
+
+        <!-- ──────────────────────────────────────────────────── -->
+        <!-- USERS TAB -->
+        <!-- ──────────────────────────────────────────────────── -->
+        <div id="users-tab" class="tab-content">
+
+            <div class="panel-section">
+                <div class="section-title" style="justify-content:space-between; flex-wrap:wrap; gap:10px;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <span style="width:24px;height:1px;background:var(--gold);display:inline-block;"></span>
+                        <span>Kullanıcı Yönetimi</span>
+                    </div>
+                    <div style="display:flex;gap:10px;">
+                        <button id="refreshUsersBtn" class="btn-secondary">↻ Yenile</button>
+                        <button id="bulkActionsBtn" class="btn-secondary">Toplu İşlem</button>
+                    </div>
+                </div>
+
+                <div style="margin-bottom:20px;">
+                    <input type="text" id="userSearchInput" placeholder="Kullanıcı ara... (Ad, email)" style="margin-bottom:10px;">
+                </div>
+
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAllUsers" style="width:14px;height:14px;cursor:pointer;accent-color:var(--gold);"></th>
+                                <th>Kullanıcı</th>
+                                <th>İlk Giriş</th>
+                                <th>Durum</th>
+                                <th>Kota (saat)</th>
+                                <th>Kullanılan</th>
+                                <th>İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px;letter-spacing:0.06em;">Yükleniyor...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+    </div><!-- /mainContent -->
+
+    <!-- Grant/Edit Access Modal -->
+    <div id="grantAccessModal" class="modal">
+        <div class="modal-content">
+            <h3>Kullanıcıya Yetki Ver</h3>
+            <div class="form-group">
+                <label>Kullanıcı Adı</label>
+                <input type="text" id="grantUserName" disabled style="color:var(--muted);">
+            </div>
+            <div class="form-group">
+                <label>Kota Süresi</label>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <div>
+                        <label style="font-size:0.6rem;color:var(--muted);display:block;margin-bottom:6px;letter-spacing:0.1em;">Saat</label>
+                        <input type="number" id="grantQuotaHours" min="0" max="23" value="8" style="margin:0;">
+                    </div>
+                    <div>
+                        <label style="font-size:0.6rem;color:var(--muted);display:block;margin-bottom:6px;letter-spacing:0.1em;">Dakika</label>
+                        <input type="number" id="grantQuotaMinutes" min="0" max="59" value="0" style="margin:0;">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button id="grantConfirmBtn" class="btn-primary">Yetki Ver</button>
+                <button id="grantCancelBtn" class="btn-secondary" style="flex:1;padding:14px;">İptal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Actions Modal -->
+    <div id="bulkActionsModal" class="modal">
+        <div class="modal-content">
+            <h3>Toplu İşlemler</h3>
+            <p style="font-size:0.78rem;color:var(--muted);margin-bottom:16px;letter-spacing:0.03em;">
+                <span id="bulkSelectedCount">0</span> kullanıcı seçildi
+            </p>
+            <div class="checkbox-group">
+                <div class="checkbox-item">
+                    <input type="radio" id="bulkAction-grant" name="bulkAction" value="grant">
+                    <label for="bulkAction-grant">Hepsine Yetki Ver</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="radio" id="bulkAction-revoke" name="bulkAction" value="revoke">
+                    <label for="bulkAction-revoke">Hepsinin Yetkisini İptal Et</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="radio" id="bulkAction-resetQuota" name="bulkAction" value="resetQuota">
+                    <label for="bulkAction-resetQuota">Quota'larını Sıfırla</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="radio" id="bulkAction-addQuota" name="bulkAction" value="addQuota">
+                    <label for="bulkAction-addQuota">Quota Ekle</label>
+                </div>
+            </div>
+
+            <div id="bulkAddQuotaOption" style="display:none;margin-top:15px;">
+                <label>Eklenecek Süre</label>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <div>
+                        <label style="font-size:0.6rem;color:var(--muted);display:block;margin-bottom:6px;letter-spacing:0.1em;">Saat</label>
+                        <input type="number" id="bulkAddQuotaHours" min="0" max="23" value="1" style="margin:0;">
+                    </div>
+                    <div>
+                        <label style="font-size:0.6rem;color:var(--muted);display:block;margin-bottom:6px;letter-spacing:0.1em;">Dakika</label>
+                        <input type="number" id="bulkAddQuotaMinutes" min="0" max="59" value="0" style="margin:0;">
+                    </div>
+                </div>
+            </div>
+
+            <div id="bulkGrantOption" style="display:none;margin-top:15px;">
+                <label>Kota Süresi</label>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <div>
+                        <label style="font-size:0.6rem;color:var(--muted);display:block;margin-bottom:6px;letter-spacing:0.1em;">Saat</label>
+                        <input type="number" id="bulkGrantQuotaHours" min="0" max="23" value="8" style="margin:0;">
+                    </div>
+                    <div>
+                        <label style="font-size:0.6rem;color:var(--muted);display:block;margin-bottom:6px;letter-spacing:0.1em;">Dakika</label>
+                        <input type="number" id="bulkGrantQuotaMinutes" min="0" max="59" value="0" style="margin:0;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-buttons">
+                <button id="bulkExecuteBtn" class="btn-success">Uygula</button>
+                <button id="bulkCancelBtn" class="btn-secondary" style="flex:1;padding:14px;">İptal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs, updateDoc, query, where, orderBy, limit, writeBatch, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCJXT78Fisf08zG9jlRe89CBul_kwjYVmA",
+            authDomain: "livechat-d12f9.firebaseapp.com",
+            projectId: "livechat-d12f9",
+            storageBucket: "livechat-d12f9.firebasestorage.app",
+            messagingSenderId: "1067971999267",
+            appId: "1:1067971999267:web:55db787c8dcaf6f6c1a396",
+            measurementId: "G-MJLT8EWYXN"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        let apiKeys = [''];
+        let grantingUserId = null;
+        let currentGrantingMode = 'grant';
+        let selectedUserIds = new Set();
+        let allUsers = [];
+        let allLogs = [];
+
+        // ── Admin Auth ──────────────────────────────────────────────
+        function showAdminLogin() {
+            document.getElementById('adminLoginOverlay').style.display = 'flex';
+            document.getElementById('mainContent').style.display = 'none';
+        }
+
+        function showMainContent(user) {
+            document.getElementById('adminLoginOverlay').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+            document.getElementById('adminUserName').textContent = user.displayName || user.email;
+            document.getElementById('adminUserPhoto').src = user.photoURL || '';
+            document.getElementById('adminUserPhoto').style.display = user.photoURL ? 'inline-block' : 'none';
+            loadConfig();
+            loadUsers();
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) { showMainContent(user); }
+            else { showAdminLogin(); }
+        });
+
+        document.getElementById('adminGoogleSignIn').addEventListener('click', async () => {
+            try { await signInWithPopup(auth, provider); }
+            catch (e) { alert('Giriş hatası: ' + e.message); }
+        });
+
+        document.getElementById('adminSignOut').addEventListener('click', async () => {
+            await signOut(auth);
+        });
+
+        // ── Tab Navigation ─────────────────────────────────────────
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                btn.classList.add('active');
+                const tabId = btn.dataset.tab + '-tab';
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // ── Elements ────────────────────────────────────────────────
+        const elements = {
+            apiKeysGrid: document.getElementById('apiKeysGrid'),
+            addKeyBtn: document.getElementById('addKeyBtn'),
+            refreshInterval: document.getElementById('refreshInterval'),
+            trialDurationMinutes: document.getElementById('trialDurationMinutes'),
+            quotaHours: document.getElementById('quotaHours'),
+            quotaMinutes: document.getElementById('quotaMinutes'),
+            saveBtn: document.getElementById('saveBtn'),
+            statusMessage: document.getElementById('statusMessage'),
+            totalKeys: document.getElementById('totalKeys'),
+            savedKeys: document.getElementById('savedKeys'),
+            grantAccessModal: document.getElementById('grantAccessModal'),
+            grantUserName: document.getElementById('grantUserName'),
+            grantQuotaHours: document.getElementById('grantQuotaHours'),
+            grantQuotaMinutes: document.getElementById('grantQuotaMinutes'),
+            grantConfirmBtn: document.getElementById('grantConfirmBtn'),
+            grantCancelBtn: document.getElementById('grantCancelBtn'),
+            bulkActionsModal: document.getElementById('bulkActionsModal'),
+            bulkActionsBtn: document.getElementById('bulkActionsBtn'),
+            selectAllUsers: document.getElementById('selectAllUsers'),
+            userSearchInput: document.getElementById('userSearchInput')
+        };
+
+        // ── API Keys ────────────────────────────────────────────────
+        function renderApiKeys() {
+            elements.apiKeysGrid.innerHTML = '';
+            apiKeys.forEach((key, index) => {
+                const keyItem = document.createElement('div');
+                keyItem.className = 'api-key-item';
+                keyItem.innerHTML = `
+                    <div class="api-key-number">#${index + 1}</div>
+                    <input type="text" class="api-key-input" data-index="${index}" placeholder="AIzaSy..." value="${key}">
+                    ${apiKeys.length > 1 ? `<button class="btn-remove" data-index="${index}">×</button>` : ''}
+                `;
+                elements.apiKeysGrid.appendChild(keyItem);
+            });
+            elements.totalKeys.textContent = apiKeys.length;
+            document.querySelectorAll('.api-key-input').forEach(input => {
+                input.addEventListener('input', (e) => { apiKeys[parseInt(e.target.dataset.index)] = e.target.value.trim(); });
+            });
+            document.querySelectorAll('.btn-remove').forEach(btn => {
+                btn.addEventListener('click', (e) => { apiKeys.splice(parseInt(e.target.dataset.index), 1); renderApiKeys(); });
+            });
+        }
+
+        elements.addKeyBtn.addEventListener('click', () => { apiKeys.push(''); renderApiKeys(); });
+
+        elements.saveBtn.addEventListener('click', async () => {
+            try {
+                const validKeys = apiKeys.filter(k => k.trim() !== '');
+                if (validKeys.length === 0) { showMessage('En az bir API anahtarı girmelisiniz!', 'error'); return; }
+                elements.saveBtn.disabled = true;
+                elements.saveBtn.textContent = 'Kaydediliyor...';
+                
+                const quotaHours = parseInt(elements.quotaHours.value) || 0;
+                const quotaMinutes = parseInt(elements.quotaMinutes.value) || 0;
+                const quotaTotalMinutes = (quotaHours * 60) + quotaMinutes;
+                
+                await setDoc(doc(db, 'config', 'settings'), {
+                    apiKeys: validKeys,
+                    refreshInterval: parseInt(elements.refreshInterval.value),
+                    trialDurationMinutes: parseInt(elements.trialDurationMinutes.value),
+                    quotaTotalMinutes: quotaTotalMinutes,
+                    updatedAt: new Date().toISOString()
+                });
+
+                await addLog('settings_change', 'Sistem ayarları güncellendi', {
+                    trialDurationMinutes: parseInt(elements.trialDurationMinutes.value),
+                    quotaTotalMinutes: quotaTotalMinutes,
+                    quotaDisplay: `${quotaHours}s ${quotaMinutes}dk`
+                });
+                
+                elements.savedKeys.textContent = validKeys.length;
+                showMessage(`✓ Başarıyla kaydedildi! Deneme: ${elements.trialDurationMinutes.value} dk, Kota: ${quotaHours}s ${quotaMinutes}dk`, 'success');
+            } catch (error) {
+                showMessage('Kaydetme hatası: ' + error.message, 'error');
+            } finally {
+                elements.saveBtn.disabled = false;
+                elements.saveBtn.textContent = 'Tüm Ayarları Kaydet';
+            }
+        });
+
+        function showMessage(text, type) {
+            const toast = document.getElementById('toast');
+            toast.textContent = text;
+            toast.className = 'show ' + (type === 'success' ? 'success' : 'error');
+            clearTimeout(window._toastTimer);
+            window._toastTimer = setTimeout(() => {
+                toast.className = toast.className.replace('show', '').trim();
+            }, 4000);
+        }
+
+        // ── Load Config ─────────────────────────────────────────────
+        async function loadConfig() {
+            try {
+                const snap = await getDoc(doc(db, 'config', 'settings'));
+                if (snap.exists()) {
+                    const data = snap.data();
+                    apiKeys = data.apiKeys || [''];
+                    elements.refreshInterval.value = data.refreshInterval || 5;
+                    elements.trialDurationMinutes.value = data.trialDurationMinutes || 15;
+                    
+                    const totalMinutes = data.quotaTotalMinutes || 480;
+                    elements.quotaHours.value = Math.floor(totalMinutes / 60);
+                    elements.quotaMinutes.value = totalMinutes % 60;
+                    
+                    elements.savedKeys.textContent = apiKeys.filter(k => k).length;
+                    renderApiKeys();
+                } else {
+                    renderApiKeys();
+                }
+            } catch (e) {
+                console.error('Config load error:', e);
+                renderApiKeys();
+            }
+        }
+
+        // ── Logs ────────────────────────────────────────────────────
+        async function addLog(type, title, details = {}) {
+            try {
+                const user = auth.currentUser;
+                await setDoc(doc(collection(db, 'logs')), {
+                    type,
+                    title,
+                    details,
+                    adminEmail: user?.email || '—',
+                    adminName: user?.displayName || user?.email || '—',
+                    timestamp: new Date().toISOString()
+                });
+            } catch (e) { console.error('Log error:', e); }
+        }
+
+        // ── Users ───────────────────────────────────────────────────
+        async function loadUsers() {
+            try {
+                const snapshot = await getDocs(collection(db, 'users'));
+                allUsers = [];
+                snapshot.forEach(doc => {
+                    allUsers.push({ id: doc.id, ...doc.data() });
+                });
+                renderUsersTable(allUsers);
+            } catch (e) {
+                console.error('Users error:', e);
+            }
+        }
+
+        function renderUsersTable(users) {
+            const tbody = document.getElementById('usersTableBody');
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px;">Kullanıcı bulunamadı</td></tr>';
+                return;
+            }
+
+            const today = new Date().toISOString().slice(0, 10);
+
+            tbody.innerHTML = users.map(u => {
+                const createdAt = u.createdAt ? new Date(u.createdAt).toLocaleDateString('tr-TR') : '—';
+                const statusColor = u.hasFullAccess ? 'var(--gold)' : 'var(--muted)';
+                const statusText = u.hasFullAccess ? 'Yetkili' : 'Deneme';
+
+                // Toplam izin verilen kota (dakika)
+                const totalQuotaMin = u.quotaMinutes || (u.quotaHours ? u.quotaHours * 60 : 480);
+                const totalQuotaH = Math.floor(totalQuotaMin / 60);
+                const totalQuotaM = totalQuotaMin % 60;
+                const quotaLabel = totalQuotaM > 0 ? `${totalQuotaH}s ${totalQuotaM}dk` : `${totalQuotaH} saat`;
+
+                // Bugün kullanılan (Firestore'daki usedMinutesToday, yalnızca quotaDate bugünse geçerli)
+                const usedMin = (u.quotaDate === today) ? (u.usedMinutesToday || 0) : 0;
+                const usedH = Math.floor(usedMin / 60);
+                const usedM = usedMin % 60;
+                const usedLabel = usedMin > 0 ? (usedH > 0 ? `${usedH}s ${usedM}dk` : `${usedM}dk`) : '—';
+
+                // Yüzde
+                const usagePercent = totalQuotaMin > 0 ? Math.min(100, Math.round((usedMin / totalQuotaMin) * 100)) : 0;
+                const barColor = usagePercent >= 90 ? 'var(--rust)' : usagePercent >= 60 ? '#c9a84c' : 'var(--gold)';
+
+                return `<tr>
+                    <td><input type="checkbox" class="user-checkbox" data-uid="${u.id}" style="width:14px;height:14px;cursor:pointer;accent-color:var(--gold);"></td>
+                    <td>
+                        <div style="font-size:0.82rem;font-weight:500;color:var(--cream);">${escHtml(u.displayName || '—')}</div>
+                        <div style="font-size:0.68rem;color:var(--muted);">${escHtml(u.email || '—')}</div>
+                    </td>
+                    <td style="font-size:0.72rem;color:var(--muted);">${createdAt}</td>
+                    <td>
+                        <span style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:${statusColor};">${statusText}</span>
+                    </td>
+                    <td style="font-size:0.78rem;">
+                        <div style="color:var(--cream);">${quotaLabel}</div>
+                        <div class="progress-bar"><div class="progress-fill" style="width:${usagePercent}%;background:${barColor};"></div></div>
+                        <div style="font-size:0.6rem;color:var(--muted);margin-top:2px;">${usagePercent}% kullanıldı</div>
+                    </td>
+                    <td style="font-size:0.72rem;color:var(--muted);">${usedLabel}</td>
+                    <td>
+                        <div style="display:flex;gap:6px;">
+                            <button class="btn-secondary" onclick="openGrantModal('${u.id}','${escHtml(u.displayName || u.email)}','grant')" style="font-size:0.6rem;padding:5px 10px;">Yetki</button>
+                            ${u.hasFullAccess ? `<button class="btn-secondary" onclick="openGrantModal('${u.id}','${escHtml(u.displayName || u.email)}','revoke')" style="font-size:0.6rem;padding:5px 10px;border-color:var(--rust);color:var(--rust);">İptal</button>` : ''}
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
+
+            document.querySelectorAll('.user-checkbox').forEach(cb => {
+                cb.addEventListener('change', (e) => {
+                    if (e.target.checked) { selectedUserIds.add(e.target.dataset.uid); }
+                    else { selectedUserIds.delete(e.target.dataset.uid); }
+                });
+            });
+        }
+
+        window.openGrantModal = function(uid, name, mode) {
+            grantingUserId = uid;
+            currentGrantingMode = mode;
+            elements.grantUserName.value = name;
+            elements.grantConfirmBtn.textContent = mode === 'grant' ? 'Yetki Ver' : 'Yetkiyi İptal Et';
+            elements.grantConfirmBtn.className = mode === 'grant' ? 'btn-primary' : 'btn-secondary';
+            elements.grantAccessModal.classList.add('active');
+        };
+
+        elements.grantCancelBtn.addEventListener('click', () => {
+            elements.grantAccessModal.classList.remove('active');
+        });
+
+        elements.grantConfirmBtn.addEventListener('click', async () => {
+            if (!grantingUserId) return;
+            const btn = elements.grantConfirmBtn;
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = '...';
+            try {
+                const userRef = doc(db, 'users', grantingUserId);
+                if (currentGrantingMode === 'grant') {
+                    const quotaHours = parseInt(elements.grantQuotaHours.value) || 0;
+                    const quotaMinutes = parseInt(elements.grantQuotaMinutes.value) || 0;
+                    const quotaTotalMinutes = (quotaHours * 60) + quotaMinutes;
+                    await updateDoc(userRef, {
+                        hasFullAccess: true,
+                        quotaMinutes: quotaTotalMinutes,
+                        quotaDate: '',
+                        usedMinutesToday: 0,
+                        quotaGrantedAt: new Date().toISOString()
+                    });
+                } else {
+                    await updateDoc(userRef, { hasFullAccess: false });
+                }
+                elements.grantAccessModal.classList.remove('active');
+                grantingUserId = null;
+                await loadUsers();
+                showMessage('✓ İşlem başarıyla tamamlandı.', 'success');
+            } catch (e) {
+                console.error('Grant error:', e);
+                showMessage('Hata: ' + e.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        });
+
+        elements.selectAllUsers.addEventListener('change', (e) => {
+            document.querySelectorAll('.user-checkbox').forEach(cb => {
+                cb.checked = e.target.checked;
+                if (e.target.checked) { selectedUserIds.add(cb.dataset.uid); }
+                else { selectedUserIds.delete(cb.dataset.uid); }
+            });
+        });
+
+        elements.bulkActionsBtn.addEventListener('click', () => {
+            document.getElementById('bulkSelectedCount').textContent = selectedUserIds.size;
+            elements.bulkActionsModal.classList.add('active');
+        });
+
+        document.getElementById('bulkCancelBtn').addEventListener('click', () => {
+            elements.bulkActionsModal.classList.remove('active');
+        });
+
+        document.querySelectorAll('input[name="bulkAction"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                document.getElementById('bulkAddQuotaOption').style.display = e.target.value === 'addQuota' ? 'block' : 'none';
+                document.getElementById('bulkGrantOption').style.display = e.target.value === 'grant' ? 'block' : 'none';
+            });
+        });
+
+        document.getElementById('bulkExecuteBtn').addEventListener('click', async () => {
+            const selectedAction = document.querySelector('input[name="bulkAction"]:checked');
+            if (!selectedAction) {
+                alert('Lütfen bir işlem seçin');
+                return;
+            }
+
+            if (selectedUserIds.size === 0) {
+                alert('Lütfen en az bir kullanıcı seçin');
+                return;
+            }
+
+            document.getElementById('bulkExecuteBtn').disabled = true;
+            document.getElementById('bulkExecuteBtn').textContent = '...';
+
+            try {
+                const batch = writeBatch(db);
+                const selectedUsers = Array.from(selectedUserIds);
+                const action = selectedAction.value;
+
+                selectedUsers.forEach(uid => {
+                    const userRef = doc(db, 'users', uid);
+                    
+                    if (action === 'grant') {
+                        const quotaHours = parseInt(document.getElementById('bulkGrantQuotaHours').value) || 0;
+                        const quotaMinutes = parseInt(document.getElementById('bulkGrantQuotaMinutes').value) || 0;
+                        const quotaTotalMinutes = (quotaHours * 60) + quotaMinutes;
+                        batch.update(userRef, {
+                            hasFullAccess: true,
+                            quotaMinutes: quotaTotalMinutes,
+                            quotaGrantedAt: new Date().toISOString()
+                        });
+                    } else if (action === 'revoke') {
+                        batch.update(userRef, { hasFullAccess: false });
+                    } else if (action === 'resetQuota') {
+                        const todayKey = `quota_${uid}_${new Date().toISOString().slice(0, 10)}`;
+                        localStorage.removeItem(todayKey);
+                    } else if (action === 'addQuota') {
+                        const addHours = parseInt(document.getElementById('bulkAddQuotaHours').value) || 0;
+                        const addMinutes = parseInt(document.getElementById('bulkAddQuotaMinutes').value) || 0;
+                        const addTotalMinutes = (addHours * 60) + addMinutes;
+                        const userData = allUsers.find(u => u.id === uid);
+                        const currentQuota = userData?.quotaMinutes || 480;
+                        batch.update(userRef, { quotaMinutes: currentQuota + addTotalMinutes });
+                    }
+                });
+
+                await batch.commit();
+                await addLog(`bulk_${action}`, `Toplu ${action} işlemi gerçekleştirildi`, {
+                    userCount: selectedUserIds.size,
+                    action
+                });
+
+                elements.bulkActionsModal.classList.remove('active');
+                selectedUserIds.clear();
+                elements.selectAllUsers.checked = false;
+                loadUsers();
+                showMessage(`✓ ${selectedUserIds.size} kullanıcıya işlem uygulandı.`, 'success');
+            } catch (e) {
+                showMessage('Hata: ' + e.message, 'error');
+            } finally {
+                document.getElementById('bulkExecuteBtn').disabled = false;
+                document.getElementById('bulkExecuteBtn').textContent = 'Uygula';
+            }
+        });
+
+        // ── Search Filter ───────────────────────────────────────────
+        elements.userSearchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#usersTableBody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+
+
+        document.getElementById('refreshUsersBtn').addEventListener('click', loadUsers);
+
+        function escHtml(str) {
+            const d = document.createElement('div');
+            d.textContent = str;
+            return d.innerHTML;
+        }
+    </script>
+
+    <script>
+        // Custom cursor
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+        document.querySelectorAll('a, button, input, select, .tab-btn').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+    </script>
+</body>
+</html>

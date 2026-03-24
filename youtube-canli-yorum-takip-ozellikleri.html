@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="YouTube Canlı Yorum Takip Sisteminin tüm özellikleri: İlk Yazan, Sıralı, En Yüksek Sayı, Rastgele Çekiliş ve daha fazlası.">
+    <meta name="keywords" content="YouTube yorum takip özellikleri, çekiliş sistemi, canlı yayın yönetimi">
+    <title>Özellikler | YouTube Canlı Yorum Takip Sistemi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">\n    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a08;
+            --bg2: #111110;
+            --cream: #ffffff;
+            --gold: #c9a84c;
+            --text-muted: #9a9a94;
+            --border: #2a2a26;
+        }
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--cream);
+            -webkit-font-smoothing: antialiased;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10,10,8,0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 40px;
+        }
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        header .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--gold);
+            text-decoration: none;
+        }
+        header .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+        header .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+        header .nav-links a:hover {
+            color: var(--gold);
+        }
+        header .cta-btn {
+            background: var(--cream);
+            color: var(--bg);
+            padding: 8px 20px;
+            border: none;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background 0.3s;
+        }
+        header .cta-btn:hover {
+            background: var(--gold);
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 140px 40px 80px;
+        }
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.8rem;
+            font-weight: 300;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 60px;
+            line-height: 1.7;
+        }
+        .features-list {
+            display: grid;
+            gap: 48px;
+        }
+        .feature-item {
+            border-left: 3px solid var(--gold);
+            padding-left: 32px;
+        }
+        .feature-item h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 400;
+            margin-bottom: 16px;
+        }
+        .feature-item .icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+        .feature-item p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+        .feature-benefits {
+            list-style: none;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.9;
+        }
+        .feature-benefits li::before {
+            content: '✓ ';
+            color: var(--gold);
+            margin-right: 8px;
+        }
+        footer {
+            padding: 40px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            margin-top: 80px;
+        }
+        footer p {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
+            margin-bottom: 8px;
+        }
+        @media (max-width: 768px) {
+            header { padding: 12px 20px; }
+            .container { padding: 100px 20px 60px; }
+            h1 { font-size: 2rem; }
+            .feature-item { padding-left: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="youtube-canli-yorum-takip-anasayfa.html" class="logo">▶ LiveTrack</a>
+            <ul class="nav-links">
+                <li><a href="youtube-canli-yorum-takip-anasayfa.html#features">Özellikler</a></li>
+                <li><a href="youtube-canli-yorum-takip-hakkinda.html">Hakkında</a></li>
+                <li><a href="youtube-canli-yorum-takip-nasil-calisir.html">Nasıl Çalışır</a></li>
+            </ul>
+            <a href="youtube-canli-yorum-takip.html" class="cta-btn">Uygulamaya Git</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Tüm Özellikler</h1>
+        <p class="subtitle">YouTube Canlı Yorum Takip Sistemi'nin profesyonel çekiliş ve yorum yönetim araçları</p>
+
+        <div class="features-list">
+            <div class="feature-item">
+                <div class="icon">🎯</div>
+                <h3>İlk Yazan Takibi</h3>
+                <p>Belirttığiniz kelimeyi en önce yazan kişiyi otomatik olarak bulur ve kazanan olarak işaretler.</p>
+                <ul class="feature-benefits">
+                    <li>Anlık tespit ve bildirimi</li>
+                    <li>Kullanıcı profili ve avatar gösterimi</li>
+                    <li>Yorum metni kaydı</li>
+                    <li>Kazananı arşive otomatik kayıt</li>
+                </ul>
+            </div>
+
+            <div class="feature-item">
+                <div class="icon">📊</div>
+                <h3>Sıralı Yazar Listesi</h3>
+                <p>Kelimeyi yazan kişileri belirttiğiniz sayıya kadar sırasıyla listeleyerek adil seçim ortamı sağlar.</p>
+                <ul class="feature-benefits">
+                    <li>Dinamik sıralama sistemi</li>
+                    <li>Özel sıralama sayısı belirleme</li>
+                    <li>Tekrar seçilmeme garantisi</li>
+                    <li>Zaman damgası ile kronolojik takip</li>
+                </ul>
+            </div>
+
+            <div class="feature-item">
+                <div class="icon">🏆</div>
+                <h3>En Yüksek Sayı Seçimi</h3>
+                <p>Canlı yayın yorumlarında geçen en yüksek sayıyı bulan kişiyi kazanan olarak belirler. Kullanıcı adlarındaki sayılar hesaplamaya dahil edilmez.</p>
+                <ul class="feature-benefits">
+                    <li>Otomatik sayı taraması</li>
+                    <li>Ondalık sayı desteği</li>
+                    <li>Kullanıcı adı filtrelemesi</li>
+                    <li>Gerçek zamanlı güncelleme</li>
+                </ul>
+            </div>
+
+            <div class="feature-item">
+                <div class="icon">🎲</div>
+                <h3>Rastgele Çekiliş</h3>
+                <p>Mevcut yorum havuzundan adil ve şeffaf şekilde rastgele kazananlar seçin. İsteğe bağlı kelime filtresi ile yalnızca belirli katılımcıları dahil edin.</p>
+                <ul class="feature-benefits">
+                    <li>Çoklu kazanan seçimi</li>
+                    <li>Opsiyonel kelime filtresi</li>
+                    <li>Tekrar seçilmeme sistemi</li>
+                    <li>Havuz istatistikleri</li>
+                </ul>
+            </div>
+
+            <div class="feature-item">
+                <div class="icon">💾</div>
+                <h3>Kayıt & Arşiv Sistemi</h3>
+                <p>Tüm çekiliş sonuçlarını detaylı olarak kayıt altına alın. Kazananlar, tarih saat ve yorum metni ile birlikte saklanır.</p>
+                <ul class="feature-benefits">
+                    <li>Sınırsız kayıt kapasitesi</li>
+                    <li>Özel isimler ile organize etme</li>
+                    <li>Çoklu kazanan desteği</li>
+                    <li>Yerel depolama (browserda)</li>
+                </ul>
+            </div>
+
+            <div class="feature-item">
+                <div class="icon">⚡</div>
+                <h3>Gerçek Zamanlı Yorum İzleme</h3>
+                <p>YouTube canlı yayınının anında tüm yorumlarını izleyin ve takip sistemine otomatik olarak dahil edin.</p>
+                <ul class="feature-benefits">
+                    <li>Canlı yorum akışı görüntüleme</li>
+                    <li>Yapılandırılabilir yenileme hızı</li>
+                    <li>API key rotasyonu</li>
+                    <li>Yorum havuzu istatistikleri</li>
+                </ul>
+            </div>
+
+            <div class="feature-item">
+                <div class="icon">🌍</div>
+                <h3>Çok Dil Desteği</h3>
+                <p>Arayüz tam olarak Türkçe ve İngilizce dillerinde desteklenmektedir. Dile göre otomatik format değişikliği.</p>
+                <ul class="feature-benefits">
+                    <li>TR & EN tam çeviri</li>
+                    <li>Bölgesel tarih formatları</li>
+                    <li>Kolay dil değiştirme</li>
+                    <li>Tercih hafızası</li>
+                </ul>
+            </div>
+
+            <div class="feature-item">
+                <div class="icon">🔐</div>
+                <h3>Güvenlik & Gizlilik</h3>
+                <p>Tüm veriler yerel olarak tarayıcınızda saklanır. Sunucuya gönderilmez, tamamen gizli ve güvenlidir.</p>
+                <ul class="feature-benefits">
+                    <li>Yerel veri depolama</li>
+                    <li>Veriler sunucuda tutulmaz</li>
+                    <li>Proje başına izolasyon</li>
+                    <li>GDPR uyumlu</li>
+                </ul>
+            </div>
+
+            <div class="feature-item">
+                <div class="icon">📱</div>
+                <h3>Responsive Tasarım</h3>
+                <p>Masaüstü, tablet ve mobil cihazlarda sorunsuz çalışır. Tüm ekran boyutlarında optimize edilmiştir.</p>
+                <ul class="feature-benefits">
+                    <li>Mobil dostu arayüz</li>
+                    <li>Tablet optimizasyonu</li>
+                    <li>Masaüstü tam uyarı</li>
+                    <li>Touch kontrolleri</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 YouTube Canlı Yorum Takip Sistemi</p>
+        <p><a href="youtube-canli-yorum-takip-anasayfa.html">Ana Sayfa</a> | <a href="youtube-canli-yorum-takip-iletisim.html">İletişim</a></p>
+    </footer>
+</body>
+</html>
